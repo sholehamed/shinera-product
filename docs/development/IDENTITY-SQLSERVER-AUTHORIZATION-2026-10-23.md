@@ -28,6 +28,14 @@
 - Suspended Tenant A prevents subsequent refresh with unchanged claims.
 - CI stores TRX logs; tests never target production or a shared database.
 
+## First explicit Resource + Action authorization building block
+
+- Added `TenantPermissionRequirement`, `TenantPermissionHandler`, and `RequireTenantPermission(resource, action)` extension in Backend PR #7.
+- Stable permission keys are validated and normalized as `RESOURCE.ACTION`. Requests without a verified authenticated Tenant account, active home-tenant, active user or matching explicit Permission fail closed.
+- Effective grants are resolved from active direct User permissions, direct Role grants, or Group → Role grants, restricted to the subject's own Tenant. Revoked/inactive grants and cross-Tenant claims do not grant permission.
+- This is **Tenant scope only** and intentionally **not yet attached to existing System admin endpoint groups**. Their established coarse SystemAdministrator policy remains in effect. It must not be mistaken for complete ADR-003 scope handling.
+- Added a third real SQL Server integration test for exact resource/action match, role grant, role revocation, direct grant, wrong Tenant, forged System context and inactive Tenant.
+
 ## Next implementation slices (not completed)
 
 1. Confirm latest SQL Server CI results, repair migration/provider issues in the feature branch and rerun.
