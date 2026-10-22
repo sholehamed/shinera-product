@@ -234,7 +234,7 @@ Multi-Tenancy
 Frontend follows:
 
 ```text
-Angular 20
+Angular 22
 Angular Material
 Trezo-based UI
 RTL

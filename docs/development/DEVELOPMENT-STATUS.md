@@ -22,7 +22,7 @@
 - Detailed record: [Engineering Log — 2026-10-22](ENGINEERING-LOG-2026-10-22.md); [Coverage](../testing/TEST-COVERAGE.md).
 
 ## Next milestones
-1. **P0 security:** fix Identity privileged endpoint authorization, CAPTCHA login enforcement, system/tenant route and claim boundaries. [Tracked issue](https://github.com/sholehamed/Shinera-backend/issues/2).
+1. **P0 remaining Identity security:** implement fine-grained permissions, positive role checks, refresh/revocation and reviewed production bootstrap ([Issues #4](https://github.com/sholehamed/Shinera-backend/issues/4) and [#5](https://github.com/sholehamed/Shinera-backend/issues/5)). Baseline group authorization and CAPTCHA guard are merged.
 2. Real System Admin login Playwright browser E2E, refresh/logout and negative API tests; isolated test users/data.
 3. Backend SQL Server integration suite with WebApplicationFactory, tenant isolation and migrations.
 4. CI reproducibility: pinned cross-repo backend commit and npm lockfile, required checks.

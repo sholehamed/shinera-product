@@ -4,12 +4,12 @@
 
 | Layer | Current measured state | CI |
 |---|---|---|
-| .NET xUnit: TenantContext and TenantResolutionMiddleware | **10 / 10 passed** | [Backend main](https://github.com/sholehamed/Shinera-backend/actions/runs/39841510200) |
-| Angular Vitest: app shell and selected System components (12 spec files) | **14 / 14 passed** | [Frontend main](https://github.com/sholehamed/Shinera-frontend/actions/runs/39841585176) |
-| Playwright API smoke: anonymous CAPTCHA and role lookup authentication | **2 / 2 passed** | [PR-head E2E](https://github.com/sholehamed/Shinera-frontend/actions/runs/39839196568) |
-| Playwright browser smoke: System login UI/CAPTCHA, required fields, public landing | **3 / 3 passed** | [PR-head E2E](https://github.com/sholehamed/Shinera-frontend/actions/runs/39839196568) |
+| .NET xUnit: TenantContext, TenantResolutionMiddleware, System admin policy and CAPTCHA | **19 / 19 passed** | [Backend main](https://github.com/sholehamed/Shinera-backend/actions/runs/39846613412) |
+| Angular Vitest: app shell and selected System components (12 spec files) | **14 / 14 passed** | [Frontend main](https://github.com/sholehamed/Shinera-frontend/actions/runs/39847035820) |
+| Playwright API: CAPTCHA, auth denial across 12 System groups, tenant mutation and login errors | **6 / 6 passed** | [Final E2E against backend main](https://github.com/sholehamed/Shinera-frontend/actions/runs/39846647097) |
+| Playwright browser smoke: System login UI/CAPTCHA, required fields, public landing | **3 / 3 passed** | [Final E2E against backend main](https://github.com/sholehamed/Shinera-frontend/actions/runs/39846647097) |
 
-**Boundaries:** The API smoke currently permits either 401 or 403 for role lookup; it does not prove full RBAC. The E2E does *not* submit successful admin credentials, assert token revocation or test tenant mutations. E2E does not currently run on `main` push.
+**Boundaries:** One legacy API smoke case tolerates either 401 or 403; the newer negative security suite enforces exact anonymous 401 on all twelve System management groups. Neither proves authenticated non-admin 403 or granular RBAC. The E2E does *not* submit successful admin credentials, assert token revocation or test tenant mutations. E2E does not currently run on `main` push.
 
 ## Priority gaps
 | Priority | Missing regression |
