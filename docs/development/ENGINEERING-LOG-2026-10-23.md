@@ -12,4 +12,4 @@
 - [Latest SQL Server CI 39855144821](https://github.com/sholehamed/Shinera-backend/actions/runs/39855144821): **3/3 integration tests passed**, including explicit `Resource.Action` permission acceptance, default deny, grant revocation and cross-tenant checks. [Backend CI 39855144815](https://github.com/sholehamed/Shinera-backend/actions/runs/39855144815): Release Build succeeded, **21/21 xUnit passed**.
 - **Still Draft; not merged.** Tenant-scope handler is not yet wired to business endpoints (business modules are not in current code), and Branch/Own/Child, System fine-grained permissions and subscription gating remain open.
 
-- **No code merged**; new SQL Server CI evidence to be attached after execution.
+- [Backend PR #7](https://github.com/sholehamed/Shinera-backend/pull/7) **merged** into main at [ad1bdad1](https://github.com/sholehamed/Shinera-backend/commit/ad1bdad1d73423b75da3c662b696579a9f1e5208). System/Branch/Own scopes are NOT yet implemented; Tenant permission helper is not connected to existing business endpoints.

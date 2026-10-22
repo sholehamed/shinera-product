@@ -39,3 +39,11 @@
 | Playwright real Angular + backend main + SQL Server | **13/13** | [Final PR-head E2E](https://github.com/sholehamed/Shinera-frontend/actions/runs/39852565729) |
 
 This latest baseline supersedes the older table above for current counts and covered flows: real admin login, UserInfo, refresh, OAuth revoke, non-admin 403, browser redirect and previous negative security checks. SQLite-based role-removal and user-deactivation tests are included in backend 21 tests. SQL Server post-issuance mutations, replay/rotation, full permissions and production hardening remain open; E2E does not run on main push.
+
+
+## SQL Server authorization regression — merged 2026-10-23
+
+- [Backend SQL Server CI 39857222037](https://github.com/sholehamed/Shinera-backend/actions/runs/39857222037): **4/4 passed**, using EF Core migrations against isolated SQL Server 2022 databases (no SQLite fallback).
+- [Backend CI 39857222206](https://github.com/sholehamed/Shinera-backend/actions/runs/39857222206): **21/21 xUnit passed**; Release Build successful.
+- Regression cases verify stale platform role and disabled user checks, tenant suspension/filter isolation, Tenant-scope `Resource.Action` grants, direct/role/group grants, explicit denied-user override, tenant consistency and cross-Tenant refusal.
+- **Not yet covered:** real API-level HTTP enforcement by `RequireTenantPermission`, System/Branch/Own/Child scopes, subscription gating, and token replay/rotation. These test counts are the final PR-head checks before backend merge, not an independent SQL Server main-push CI run.

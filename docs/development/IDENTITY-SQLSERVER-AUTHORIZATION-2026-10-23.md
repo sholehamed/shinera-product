@@ -1,6 +1,6 @@
 # Shinera — SQL Server Identity & ADR-003 Authorization — 2026-10-23
 
-**State:** In progress — code and docs on feature branches, **not merged**  
+**State:** First SQL Server/tenant-permission slice **merged** to backend main; complete ADR-003 still open  
 **Linked work:** [Backend PR #7](https://github.com/sholehamed/Shinera-backend/pull/7) · [P0 Issue #4](https://github.com/sholehamed/Shinera-backend/issues/4) · [P0 Issue #5](https://github.com/sholehamed/Shinera-backend/issues/5)  
 **Architecture decisions:** [ADR-001](../architecture/decisions/ADR-001-MULTI-TENANCY-STRATEGY.md), [ADR-003](../architecture/decisions/ADR-003-AUTHORIZATION-AND-PERMISSION-MODEL.md)
 
@@ -35,24 +35,30 @@
 - Effective grants are resolved from active direct User permissions, direct Role grants, or Group → Role grants, restricted to the subject's own Tenant. Revoked/inactive grants and cross-Tenant claims do not grant permission.
 - This is **Tenant scope only** and intentionally **not yet attached to existing System admin endpoint groups**. Their established coarse SystemAdministrator policy remains in effect. It must not be mistaken for complete ADR-003 scope handling.
 - Added a third real SQL Server integration test for exact resource/action match, role grant, role revocation, direct grant, wrong Tenant, forged System context and inactive Tenant.
+- **Final review fix:** explicit user-level denial (`IsGranted=false`) overrides inherited Role/Group grants, preserving the legacy permission checker behavior. Group and GroupRole rows must also match the current Tenant. A fourth SQL Server test covers both cases.
 
 ## Next implementation slices (not completed)
 
-1. Confirm latest SQL Server CI results, repair migration/provider issues in the feature branch and rerun.
-2. Establish explicit endpoint permission metadata such as `RequirePermission("appointments", "view")` consistent with ADR-003; do not depend on URL-derived strings.
-3. Build a fail-closed System-aware and Tenant-aware effective permission evaluator; apply membership and scope checks before grants and do not equate Tenant Owner with Platform Admin.
-4. Add tests for direct grants, role grants, cross-tenant denial, revoked permission, and precise unauthorized/forbidden behavior on actual endpoints. Cover branch and own scope only once their data ownership rules are implemented.
-5. Review System administrator role storage in the legacy master Tenant record and reconcile with the policy that platform users themselves have no TenantId.
-6. Verify token rotation/reuse semantics, production signing keys and OpenIddict client bootstrap separately.
+1. Apply the new explicit `RequireTenantPermission(resource, action)` to real business endpoints as they are implemented; add actual HTTP 401/403 tests, not only requirement-handler integration tests.
+2. Build separate System permission policies and tenant Branch/Own scope evaluators with defined membership and ownership. Preserve the platform/tenant boundary.
+3. Resolve how the legacy master-Tenant record stores platform role definitions without treating the platform administrator itself as a Tenant.
+4. Verify token rotation/reuse semantics, production signing keys, OpenIddict client bootstrap and Subscription gating separately.
 
 ## Verification ledger
 
 | Check | Status |
 |---|---|
-| GitHub Actions Backend SQL Server integration tests on PR #7 | **3/3 passed** — [run 39855144821](https://github.com/sholehamed/Shinera-backend/actions/runs/39855144821) |
-| Existing Backend CI on main (previous 21 xUnit) | Existing baseline, not evidence for new tests |
-| Resource/Action/Scope authorization enforcement | Not implemented in this slice |
+| GitHub Actions Backend SQL Server integration tests on PR #7 | **4/4 passed** — [final head run 39857222037](https://github.com/sholehamed/Shinera-backend/actions/runs/39857222037) |
+| Backend CI at final PR head | **21/21 xUnit passed; Build successful** — [run 39857222206](https://github.com/sholehamed/Shinera-backend/actions/runs/39857222206) |
+| Resource/Action/Scope authorization enforcement | Tenant-scope `Resource.Action` handler implemented and database-tested, **not yet applied to product endpoints**; System/Branch/Own remain open |
 
 ## Documentation rule
 
 When this PR is updated/merged, write exact code commit SHA, test counts and workflow URLs here and append a dated record to `docs/development/ENGINEERING-LOG-2026-10-23.md`. Never describe tests as successful before their GitHub Actions runs complete.
+
+## Final review and backend merge
+
+- [Backend PR #7](https://github.com/sholehamed/Shinera-backend/pull/7) reviewed against final head `9170a08f7a0b73c19f99904ef3cdd18f12014f9c`, verified no merge conflict and both checks successful.
+- Corrected two authorization gaps before merge: explicit denial precedence over Role/Group and cross-tenant Group/GroupRole mismatch. Added fourth SQL Server regression.
+- [SQL Server CI 39857222037](https://github.com/sholehamed/Shinera-backend/actions/runs/39857222037): **4/4 passed**. [Backend CI 39857222206](https://github.com/sholehamed/Shinera-backend/actions/runs/39857222206): **21/21 xUnit passed**, Release Build successful.
+- Backend PR #7 **squash merged** into `main` at [ad1bdad1](https://github.com/sholehamed/Shinera-backend/commit/ad1bdad1d73423b75da3c662b696579a9f1e5208). The new handler is an available authorization primitive, not a blanket activation of unfinished permission policies.
