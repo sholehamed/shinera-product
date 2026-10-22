@@ -19,3 +19,6 @@ See [Phase engineering record](PLATFORM-ROLE-WRITES-2026-10-23.md).
 - [Backend CI 39868009455](https://github.com/sholehamed/Shinera-backend/actions/runs/39868009455): **21/21 passed** and Build successful.
 - [SQL Server CI 39868009445](https://github.com/sholehamed/Shinera-backend/actions/runs/39868009445): **12/12 integration tests passed**; real HTTP API startup/login, Role POST 201 and out-of-scope RolePermissions PUT 403 also passed.
 - Backend PR #12 and Product PR #8 remain **Draft; not merged**. Issue #11 remains open for complete permission catalog CRUD, durable audit, production bootstrap and expanded API tests.
+
+- Added independently testable `AuthorizedPlatformMasterWrite` gateway and a SQL Server post-issuance role-revocation/scope-lifetime test. [Backend CI 39869241494](https://github.com/sholehamed/Shinera-backend/actions/runs/39869241494) passed **21/21**; [SQL Server CI 39869241918](https://github.com/sholehamed/Shinera-backend/actions/runs/39869241918) passed **13/13** and live HTTP role-create/forbidden-write smoke.
+- Review note: Role API endpoints still use `PlatformRoleWriteExecutor`, which duplicates parts of the new gateway's live checks. Consolidation and broader CRUD/fine-grained permission tests are still required; no merge performed.
