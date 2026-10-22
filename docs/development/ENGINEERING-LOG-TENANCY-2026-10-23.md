@@ -26,3 +26,5 @@
 - Last PR-head [Backend CI 39863656917](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656917) passed **21/21**, [SQL Server CI 39863656779](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656779) passed **10/10** with real application startup/seeding/admin login/Roles GET smoke.
 - [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11) created for future verified System Role/Permission CRUD under bounded platform scope. [Issue #9](https://github.com/sholehamed/Shinera-backend/issues/9) remains open for complete P0 acceptance criteria.
 - No blanket write authority was granted to System accounts; query-filter bypass does not imply write authority. Non-intercepted SQL/bulk operations require their own audit.
+
+- Post-merge Backend CI on `main` also succeeded: [run 39865863577](https://github.com/sholehamed/Shinera-backend/actions/runs/39865863577) for squash commit `2c53fd8a`. The 10/10 SQL Server integration + API smoke result remains the final PR-head run and is **not** a separate main-push SQL Server run.
