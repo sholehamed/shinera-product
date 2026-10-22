@@ -59,3 +59,12 @@
 - Disposable SQL Server [run 39868009445](https://github.com/sholehamed/Shinera-backend/actions/runs/39868009445) succeeded: real migrations, **12/12 integration tests**, and application startup/seed/admin login with protected Roles GET plus Role POST (201) and out-of-scope permission PUT (403).
 - Security hardening also tightened `ActiveSystemAdministratorHandler` to require active master-scoped SuperAdmin assignment, not a lookalike role granted by an arbitrary tenant. Existing SQLite/SQL Server fixtures were updated to reflect this invariant; interim failing checks are not presented as final results.
 - All changes are in the new feature branch. **No merge has been performed.** Complete Permission catalog CRUD, PUT/DELETE/PATCH HTTP integration and durable authorization audit remain Issue #11 follow-ups.
+
+
+## Latest additional hardening and CI — 2026-10-23
+
+- Added `AuthorizedPlatformMasterWrite` as a separately testable, live-database-validated master write gateway. It verifies the current System actor, active account, active Master Tenant and a master-scoped SuperAdmin membership *before* opening the bounded write scope. The gateway restores the read filter and write scope together after disposal, and logs authorization failures and scope lifecycle. **The current Role HTTP endpoints still use `PlatformRoleWriteExecutor`; consolidation of these two internal gateways should be considered before production readiness.**
+- Added a SQL Server regression that confirms active authorized master-scope write succeeds, other-tenant writes fail, the scope does not leak after disposal, revoking the persisted administrator role blocks access despite stale JWT claims, and a forged `tenant_id` claim is rejected.
+- Latest [Backend CI 39869241494](https://github.com/sholehamed/Shinera-backend/actions/runs/39869241494): **21/21 xUnit passed** with Release Build.
+- Latest [SQL Server CI 39869241918](https://github.com/sholehamed/Shinera-backend/actions/runs/39869241918): **13/13 integration tests passed**, plus live server migration/seed/login, authorized Role POST and forbidden cross-scope write.
+- Changes remain on branches and PRs; **no merge**. Issue #11 has remaining per-action fine-grained permission grants, complete Permission CRUD and transaction/rollback tests.
