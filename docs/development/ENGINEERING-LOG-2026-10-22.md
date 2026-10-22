@@ -69,3 +69,11 @@ For each significant development PR, record: date, branch, PR, merge commit, cha
 - [Frontend PR #2](https://github.com/sholehamed/Shinera-frontend/pull/2) squash-merged to main: [af772b2](https://github.com/sholehamed/Shinera-frontend/commit/af772b2052f9c36a71099f006dffd50d6e224ced). Post-merge [Frontend main CI 39847035820](https://github.com/sholehamed/Shinera-frontend/actions/runs/39847035820): **successful** (build + 14 Vitest).
 - **Open P0 security debt (not concealed by green CI):** role/permission revalidation during token refresh [Issue #4](https://github.com/sholehamed/Shinera-backend/issues/4) and complete ADR-003 platform authorization with controlled production bootstrap and signing material [Issue #5](https://github.com/sholehamed/Shinera-backend/issues/5). Userinfo/Logout flow and positive auth integrations also remain unverified.
 - E2E in current workflow runs for PRs and manual dispatch, **not** on pushes to main. The 9/9 evidence is a final PR-head run against backend main, not a separate full-stack post-merge main run.
+
+
+## Token lifecycle hardening started — 2026-10-22
+
+- [Backend draft PR #6](https://github.com/sholehamed/Shinera-backend/pull/6) on `security/identity-token-lifecycle-20261022`: verify current account state, tenant, security stamp, role/permission snapshot before token refresh, and database-check current superadmin status on privileged API calls. Adds a standard OAuth revocation endpoint.
+- [Frontend draft PR #3](https://github.com/sholehamed/Shinera-frontend/pull/3) on `test/identity-token-lifecycle-20261022`: real System admin login, refresh, revocation, non-admin 403, and browser login. Uses disposable Development-only CAPTCHA and credentials; temporary backend branch checkout.
+- [Backend CI 39848876548](https://github.com/sholehamed/Shinera-backend/actions/runs/39848876548) passed after a compile fix. E2E results pending.
+- [Detailed engineering record](IDENTITY-TOKEN-LIFECYCLE-2026-10-22.md).
