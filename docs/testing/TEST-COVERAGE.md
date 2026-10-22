@@ -27,5 +27,5 @@
 ## Security test work in progress (not part of main baseline)
 
 - Backend security branch: 9 additional policy/CAPTCHA unit tests, totaling **19/19** in the initial security PR CI ([run 39843466153](https://github.com/sholehamed/Shinera-backend/actions/runs/39843466153)).
-- Frontend security PR #2 introduces real-API negative Playwright cases for protected System endpoints, anonymous mutation and CAPTCHA errors; final cross-repository CI has not yet been accepted as a release gate.
+- Frontend security PR #2: **9/9 full-stack Playwright passed** ([run 39844816502](https://github.com/sholehamed/Shinera-frontend/actions/runs/39844816502)): 5 existing smoke tests plus 4 new negative security cases (anonymous privileged endpoint access, anonymous mutation, malformed CAPTCHA, missing login context). Against unmerged backend feature branch and disposable SQL Server; not yet merged into main.
 - **Not covered yet:** positive admin login, permission revocation, OpenIddict refresh/logout lifecycle, production role/bootstrap migration, tenant cross-write integration cases.
