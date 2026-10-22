@@ -1,8 +1,8 @@
 # Shinera — Tenant Write Isolation (P0) — 2026-10-23
 
-**Status:** Work in progress, not merged.  
+**Status:** Scoped EF Core write-isolation baseline merged to backend `main`; broader platform write authorization and bypass audits still open.  
 **Issue:** [Backend #9](https://github.com/sholehamed/Shinera-backend/issues/9)  
-**Backend branch:** `security/tenant-write-isolation-20261023` — [Draft PR #10](https://github.com/sholehamed/Shinera-backend/pull/10)  
+**Backend branch:** `security/tenant-write-isolation-20261023` — [merged PR #10](https://github.com/sholehamed/Shinera-backend/pull/10)  
 **Product docs branch:** `docs/tenant-write-isolation-20261023`
 
 ## Initial findings from current code
@@ -25,7 +25,7 @@
 
 ## Design limits / review gates
 
-- **Do not merge while the CI is unverified.** Check latest Backend CI and isolated SQL Server job, resolve any failures within the new branch.
+- **Verified before merge:** the final PR-head [Backend CI 39863656917](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656917) and [SQL Server CI 39863656779](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656779) succeeded.
 - System admin write flows handling tenant-scoped platform definitions may require explicit trusted operation scopes. Current System endpoints still use coarse `SystemAdministrator` authentication and do **not** automatically open the new write scope. Test their affected create/update/delete paths before enabling a production deployment; an allowed read must not imply an allowed write.
 - Trusted platform writes currently cover only fixed master storage scope. Platform operations on actual business tenants (Tenant itself, which is not IMustHaveTenant, plus child entities) need resource-specific authorization and audit rules rather than a global scope bypass.
 - Existing relational FK integrity, raw SQL and bulk API code paths are independent from EF SaveChanges interceptors and need separate review.
@@ -39,9 +39,9 @@
 | Backend xUnit & Release Build | **21/21 passed** | [Final head run 39863656917](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656917) |
 | Real SQL Server migration/write-isolation tests | **10/10 passed** | [Final head run 39863656779](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656779) |
 | Startup migrations/seed + real admin login and protected Roles lookup | **Passed** | [SQL Server CI 39863656779](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656779) — limited to startup/login/GET; mutating Role CRUD still requires a dedicated platform write operation |
-| Main branch merge | Not performed | Await review |
+| Backend merge | **Merged** | [PR #10](https://github.com/sholehamed/Shinera-backend/pull/10), squash [2c53fd8a](https://github.com/sholehamed/Shinera-backend/commit/2c53fd8a75299e76a03dd85ec6fc8d3666bc60a3) |
 
-All results, fixes, risk decisions, PR and merge commit hashes must be added to this document and dated engineering log before treating this phase as done.
+All results and merge commits are recorded below. Do **not** treat full production tenant isolation or platform Role CRUD as completed.
 
 ## Initial CI and compatibility findings — 2026-10-23
 
@@ -50,3 +50,11 @@ All results, fixes, risk decisions, PR and merge commit hashes must be added to 
 - Later commit [b4733673](https://github.com/sholehamed/Shinera-backend/commit/b4733673be4874f9a9a5a9b027b27ea78bb6d8ee) added a real API startup + seed + admin login/role lookup smoke step. **Verified passing** on [SQL Server CI 39863656779](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656779), on the final code head.
 - Inspection of current `RoleCreateCommandHandler` found that a System role created from the existing command mapping has no explicit master storage `TenantId`. With default-deny writes this will correctly be refused unless a dedicated, authorized platform writer supplies the master scope. The prior implementation also could not assign an ActiveTenantId for a System user. **Do not silently fix this by letting every System request pick arbitrary TenantIds.** This is a follow-up needed before platform Role CRUD production rollout.
 - Only DbContexts registered through the normal module dependency-injection/interceptor pipeline receive this EF interceptor. Raw SQL, bulk writes, and manual DbContext construction require independent access reviews.
+
+## Final review and merge — 2026-10-23
+
+- Reviewed the final [backend PR #10](https://github.com/sholehamed/Shinera-backend/pull/10) head `b4733673be4874f9a9a5a9b027b27ea78bb6d8ee`, confirmed clean mergeability and both successful CI gates. No blocking regression was found in the scoped interceptor/bootstrap changes.
+- **Backend merged** at [`2c53fd8a`](https://github.com/sholehamed/Shinera-backend/commit/2c53fd8a75299e76a03dd85ec6fc8d3666bc60a3); the new interceptor now applies in the module's normal DI path to both synchronous and asynchronous EF Core SaveChanges.
+- Final pre-merge proof: [21/21 xUnit](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656917), [10/10 SQL Server](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656779), plus a passing real API startup, development admin login and protected Roles GET smoke against migrated/seeded SQL Server.
+- **Independent remaining P0:** [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11) tracks missing explicitly authorized/audited System Role/Permission CRUD, which must not be fixed by unrestricted system write access. [Issue #9](https://github.com/sholehamed/Shinera-backend/issues/9) stays open until its full acceptance criteria, including actual privileged platform write operations, are covered.
+- Test coverage is specifically EF Core `SaveChanges` with the standard interceptor registration; raw SQL, `ExecuteUpdate`/`ExecuteDelete`, manually constructed DbContexts and authorization failure-to-HTTP status mapping require separate audit. No claim of SQL Server row-level security is made.
