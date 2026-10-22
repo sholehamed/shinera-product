@@ -1,7 +1,7 @@
 # Shinera — Identity Token Lifecycle & Real System Login
 
 **Date:** 2026-10-22  
-**State:** Work in progress — no PR merged  
+**State:** Scoped feature merged in Backend and Frontend; residual security work remains open  
 **Architecture references:** ADR-001, ADR-002, ADR-003  
 **Tracked P0:** [Backend Issue #4](https://github.com/sholehamed/Shinera-backend/issues/4), [Issue #5](https://github.com/sholehamed/Shinera-backend/issues/5)
 
@@ -68,4 +68,12 @@
 
 ## Final review discovery (2026-10-22)
 
-The security review uncovered a real compatibility issue in `DefaultIdentitySeedContributor.SeedOpenIddictAsync`: a previously existing public client `postman` was not updated with OpenIddict's `Revocation` endpoint permission. This meant the frontend's new server-side logout could be rejected on databases created before this feature. Backend PR #6 was patched to populate the **existing** application descriptor, append just the missing revocation permission, and update the existing object, without overwriting the client's other values. [OpenIddict endpoint permissions](https://documentation.openiddict.com/configuration/application-permissions) require this grant. The patch must pass its own latest backend CI before merge.
+The security review uncovered a real compatibility issue in `DefaultIdentitySeedContributor.SeedOpenIddictAsync`: a previously existing public client `postman` was not updated with OpenIddict's `Revocation` endpoint permission. This meant the frontend's new server-side logout could be rejected on databases created before this feature. Backend PR #6 was patched to populate the **existing** application descriptor, append just the missing revocation permission, and update the existing object, without overwriting the client's other values. [OpenIddict endpoint permissions](https://documentation.openiddict.com/configuration/application-permissions) require this grant. Verified by the final successful backend CI; the change has now been merged.
+
+## Final review and merged results — 2026-10-22
+
+- [Backend PR #6](https://github.com/sholehamed/Shinera-backend/pull/6) **merged** via [b2f1beb3](https://github.com/sholehamed/Shinera-backend/commit/b2f1beb301ef1e4ae76a64e9351fa8b3c2632d89). [Final Backend CI](https://github.com/sholehamed/Shinera-backend/actions/runs/39852308481): **21/21 xUnit passed**, Release Build succeeded.
+- Final review fixed existing seeded OpenIddict clients lacking Revocation permission; the stored application descriptor is preserved and only the missing permission is added.
+- Frontend E2E no longer checks out a temporary backend branch; [Full-stack CI](https://github.com/sholehamed/Shinera-frontend/actions/runs/39852565729) with merged backend main passed **13/13 Playwright** including real admin login, refresh, revocation and non-admin 403.
+- [Frontend PR #3](https://github.com/sholehamed/Shinera-frontend/pull/3) **merged** via [3e30c547](https://github.com/sholehamed/Shinera-frontend/commit/3e30c547eb9a5dd9cc535ae877a3c56bf533213a). [Final PR-head Frontend CI](https://github.com/sholehamed/Shinera-frontend/actions/runs/39852565679): **16/16 Vitest passed** with Angular build.
+- Remaining: SQL Server token/role/tenant mutation and replay/rotation scenarios, full ADR-003 permissions, production key/client provisioning and JWT invalidation outside System admin endpoints. E2E runs on PR/dispatch, not automatically on main push.

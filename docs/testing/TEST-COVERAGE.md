@@ -29,3 +29,13 @@
 - Backend `main`: **19/19 xUnit passed** (10 original + 9 additional policy/CAPTCHA) — [post-merge main CI 39846613412](https://github.com/sholehamed/Shinera-backend/actions/runs/39846613412).
 - Frontend merged PR #2: **9/9 full-stack Playwright passed** ([final pre-merge run 39846647097](https://github.com/sholehamed/Shinera-frontend/actions/runs/39846647097)): 5 original smoke tests + 4 negative security cases (anonymous access to all 12 management groups, anonymous tenant mutation, malformed CAPTCHA, missing login context). Uses the merged backend **main** and disposable SQL Server. E2E workflow runs on PR and manual dispatch, not `main` push.
 - **Not covered yet:** positive admin login, authenticated non-admin 403, permission revocation, OpenIddict refresh/logout lifecycle, production role/bootstrap migration, tenant cross-write integration cases. [Issue #4](https://github.com/sholehamed/Shinera-backend/issues/4), [Issue #5](https://github.com/sholehamed/Shinera-backend/issues/5).
+
+## Latest merged Identity Token Lifecycle baseline (2026-10-22)
+
+| Test layer | Verified passing | Evidence |
+|---|---|---|
+| .NET xUnit | **21/21** | [Backend CI](https://github.com/sholehamed/Shinera-backend/actions/runs/39852308481) |
+| Angular Vitest | **16/16** | [Frontend CI](https://github.com/sholehamed/Shinera-frontend/actions/runs/39852565679) |
+| Playwright real Angular + backend main + SQL Server | **13/13** | [Final PR-head E2E](https://github.com/sholehamed/Shinera-frontend/actions/runs/39852565729) |
+
+This latest baseline supersedes the older table above for current counts and covered flows: real admin login, UserInfo, refresh, OAuth revoke, non-admin 403, browser redirect and previous negative security checks. SQLite-based role-removal and user-deactivation tests are included in backend 21 tests. SQL Server post-issuance mutations, replay/rotation, full permissions and production hardening remain open; E2E does not run on main push.

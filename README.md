@@ -7,6 +7,7 @@ Canonical product and engineering documentation for [Shinera](https://github.com
 - [Architecture and ADRs](docs/architecture/ARCHITECTURE-OVERVIEW.md)
 - [Current development status](docs/development/DEVELOPMENT-STATUS.md)
 - [Engineering log](docs/development/ENGINEERING-LOG-2026-10-22.md)
+- [Identity token lifecycle: merged PRs, CI, residual risks](docs/development/IDENTITY-TOKEN-LIFECYCLE-2026-10-22.md)
 - [Identity security phase 1 (scope, evidence and remaining risks)](docs/development/IDENTITY-SECURITY-PHASE1.md)
 - [Test strategy](docs/testing/TEST-STRATEGY.md)
 - [Executed test coverage and gaps](docs/testing/TEST-COVERAGE.md)
