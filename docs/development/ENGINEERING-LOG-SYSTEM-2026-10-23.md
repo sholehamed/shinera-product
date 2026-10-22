@@ -21,3 +21,5 @@
 - [Backend CI 39859081756](https://github.com/sholehamed/Shinera-backend/actions/runs/39859081756): **21/21 xUnit + Release Build**; [SQL Server 39859082403](https://github.com/sholehamed/Shinera-backend/actions/runs/39859082403): **6/6** on final PR head.
 - Permission handler remains **opt-in**. Current privileged System API endpoints continue using `SystemAdministrator`. Activate granular permissions only with a catalog, grant migration, compatibility plan and HTTP 401/403 tests.
 - P0 TenantSaveChangesInterceptor write-isolation flaw is open as [Issue #9](https://github.com/sholehamed/Shinera-backend/issues/9).
+
+- Post-merge [Backend main CI 39861500596](https://github.com/sholehamed/Shinera-backend/actions/runs/39861500596) succeeded for squash commit `664b8bb9`. The SQL Server **6/6** evidence remains the final PR-head run `39859082403`; there was no separate automatic SQL Server `main` push run.
