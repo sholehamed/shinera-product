@@ -49,7 +49,7 @@
 
 | Check | Status |
 |---|---|
-| GitHub Actions Backend SQL Server integration tests on PR #7 | Pending verification |
+| GitHub Actions Backend SQL Server integration tests on PR #7 | **3/3 passed** — [run 39855144821](https://github.com/sholehamed/Shinera-backend/actions/runs/39855144821) |
 | Existing Backend CI on main (previous 21 xUnit) | Existing baseline, not evidence for new tests |
 | Resource/Action/Scope authorization enforcement | Not implemented in this slice |
 
