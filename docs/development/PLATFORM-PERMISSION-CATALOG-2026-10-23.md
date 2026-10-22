@@ -60,5 +60,5 @@ The new flags are **OFF by default**:
 |---|---|---|
 | Backend Release Build + xUnit | [CI 39872147609](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147609) | **21/21 passed**, Release Build successful |
 | SQL Server migration and permissions | [CI 39872147628](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147628) | **14/14 passed**, real SQL Server migrations |
-| Disposable real HTTP opt-in Role creation | [PR #13 Checks](https://github.com/sholehamed/Shinera-backend/pull/13/checks) | Pending final-head verification |
+| Disposable real HTTP opt-in Role creation | [CI 39872147628](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147628) | **Passed**, System login, protected read, authorized Role POST and foreign-scope 403 |
 | Production migration and enforcement | Not performed | Explicit later rollout |
