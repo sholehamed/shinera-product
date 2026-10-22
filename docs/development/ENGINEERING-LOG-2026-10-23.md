@@ -13,3 +13,5 @@
 - **Still Draft; not merged.** Tenant-scope handler is not yet wired to business endpoints (business modules are not in current code), and Branch/Own/Child, System fine-grained permissions and subscription gating remain open.
 
 - [Backend PR #7](https://github.com/sholehamed/Shinera-backend/pull/7) **merged** into main at [ad1bdad1](https://github.com/sholehamed/Shinera-backend/commit/ad1bdad1d73423b75da3c662b696579a9f1e5208). System/Branch/Own scopes are NOT yet implemented; Tenant permission helper is not connected to existing business endpoints.
+
+- Post-merge `main` Backend CI also succeeded: [run 39857543388](https://github.com/sholehamed/Shinera-backend/actions/runs/39857543388) for merge commit `ad1bdad1`. SQL Server integration CI is currently PR/dispatch-triggered, so **4/4** refers to the final PR-head run `39857222037`, not a distinct SQL Server run on `main`.
