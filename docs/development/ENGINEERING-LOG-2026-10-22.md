@@ -45,3 +45,16 @@ Both PRs were reviewed and squash-merged to their respective `main` branches on 
 ## Engineering log policy
 
 For each significant development PR, record: date, branch, PR, merge commit, changed area, product story/ADR link, verification/CI URLs, outstanding debt and security implications. Append to this log for same-day changes and create a new `ENGINEERING-LOG-YYYY-MM-DD.md` for later days. Keep `DEVELOPMENT-STATUS.md` and `docs/testing/TEST-COVERAGE.md` aligned with the current source.
+
+
+---
+
+## Identity/System Phase 1 started — 2026-10-22
+
+- Backend feature branch `security/identity-system-hardening-20261022`, [PR #3](https://github.com/sholehamed/Shinera-backend/pull/3).
+- 12 System management endpoint groups now require a dedicated System Administrator policy: authenticated `system` context, no `tenant_id`, explicit `superadmin` role. Public Tenant resolve and login/CAPTCHA remain explicitly anonymous.
+- Login password grant now enforces CAPTCHA result and fails closed on unsupported/missing login context.
+- Development-only seed ensures an administrator role assignment; no known-password System admin is seeded in Production.
+- Added policy/CAPTCHA unit tests; first [backend CI run](https://github.com/sholehamed/Shinera-backend/actions/runs/39843466153) **passed all 19 unit tests**.
+- Frontend branch `test/identity-system-security-20261022`, [PR #2](https://github.com/sholehamed/Shinera-frontend/pull/2): Playwright negative auth/CAPTCHA tests against temporary backend feature branch checkout. Status of latest frontend security E2E must be checked before completion.
+- Detailed implementation and remaining risks: [Identity Phase 1](IDENTITY-SECURITY-PHASE1.md). Follow-up production role mapping, dynamic permissions, refresh/revocation and stronger integration tests remain open.
