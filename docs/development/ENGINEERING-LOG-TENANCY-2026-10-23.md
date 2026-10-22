@@ -1,0 +1,13 @@
+# Shinera Engineering Log — Tenant Write Isolation — 2026-10-23
+
+## P0 remediation started
+
+- Created [Backend feature branch](https://github.com/sholehamed/Shinera-backend/tree/security/tenant-write-isolation-20261023) and [Draft PR #10](https://github.com/sholehamed/Shinera-backend/pull/10), linked to [Issue #9](https://github.com/sholehamed/Shinera-backend/issues/9).
+- Created a separate documentation branch `docs/tenant-write-isolation-20261023` in `shinera-product`.
+- Investigated `TenantSaveChangesInterceptor`, `ITenantContext`, `TenantAccessResolver`, request-level `TenantResolutionMiddleware`, `DbSeeder`, and active System/Tenant authority.
+- Implemented fail-closed tracking for Added/Modified/Deleted `IMustHaveTenant` writes on sync and async EF Core saves, honoring only actual writable Tenant scope.
+- Separated read query-filter bypass from write authorization, and introduced an infrastructure-owned bootstrap scope for seed/migration and explicit bounded platform-master write scopes (no implicit System write bypass).
+- Added SQL Server write isolation, reassignment and privileged scope regression tests; CI **pending**, no completion claimed.
+- Noted System admin CRUD/seed compatibility risk; this must be resolved or explicitly blocked before merge.
+
+[Detailed rationale and verification](TENANT-WRITE-ISOLATION-2026-10-23.md).
