@@ -30,3 +30,8 @@
 
 ## Rules
 Actual current repository code is the source of truth for what exists; PRD/backlog/ADRs determine correct behavior. No inherited completion status from old implementation branches. Record each completed PR and its test evidence in `ENGINEERING-LOG-YYYY-MM-DD.md`.
+
+
+## In progress: Identity/System Security — 2026-10-22
+
+Security hardening is actively being developed in [Backend PR #3](https://github.com/sholehamed/Shinera-backend/pull/3) and negative API testing in [Frontend PR #2](https://github.com/sholehamed/Shinera-frontend/pull/2). Changes are **not yet merged to main**. Initial Backend CI: 19 unit tests passed. This does not claim completion of fine-grained ADR-003 permission enforcement or refresh-token revocation. See [Phase 1 record](IDENTITY-SECURITY-PHASE1.md).
