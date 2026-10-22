@@ -54,3 +54,12 @@ This latest baseline supersedes the older table above for current counts and cov
 - [Backend [PR #8](https://github.com/sholehamed/Shinera-backend/pull/8) merged at [`664b8bb9`](https://github.com/sholehamed/Shinera-backend/commit/664b8bb95a3926b292d5ae4703505627a95741c5). Final PR-head runs: [Backend CI 39859081756](https://github.com/sholehamed/Shinera-backend/actions/runs/39859081756) **21/21 passed** and [SQL Server CI 39859082403](https://github.com/sholehamed/Shinera-backend/actions/runs/39859082403) **6/6 passed**, including actual foreign-Tenant role grants.
 - System permissions are validated through DB-backed handler tests but **not yet mapped to real HTTP endpoints**. Do not equate these tests with comprehensive platform permission enforcement.
 - Remaining: Platform endpoint policy metadata & 401/403, Branch/Own scopes, write-scope interceptor P0 [#9](https://github.com/sholehamed/Shinera-backend/issues/9), and production permission bootstrap.
+
+
+## Tenant Write Isolation — merged baseline (2026-10-23)
+
+- [Backend PR #10](https://github.com/sholehamed/Shinera-backend/pull/10) merged at [`2c53fd8a`](https://github.com/sholehamed/Shinera-backend/commit/2c53fd8a75299e76a03dd85ec6fc8d3666bc60a3).
+- [Backend CI 39863656917](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656917): **21/21 xUnit passed**, Build successful.
+- [SQL Server CI 39863656779](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656779): **10/10 SQL Server tests passed** (includes 4 new write isolation cases and previous 6), plus real app migrations/seed/admin login/Roles GET smoke.
+- Tests cover normal in-tenant insert/update, cross-tenant add/update/delete, tenant-id reassignment, synchronous/async writes, scoped platform-master writes, startup bootstrap and disposal boundaries.
+- **Not covered:** full System Role/Permission CRUD + HTTP authorization under trusted write scope ([#11](https://github.com/sholehamed/Shinera-backend/issues/11)); bulk/raw SQL and manual DbContexts; full P0 acceptance ([#9](https://github.com/sholehamed/Shinera-backend/issues/9)). The SQL Server test result above is the last PR-head run, not a separate main push run.
