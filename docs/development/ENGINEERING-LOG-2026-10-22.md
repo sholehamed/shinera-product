@@ -69,3 +69,25 @@ For each significant development PR, record: date, branch, PR, merge commit, cha
 - [Frontend PR #2](https://github.com/sholehamed/Shinera-frontend/pull/2) squash-merged to main: [af772b2](https://github.com/sholehamed/Shinera-frontend/commit/af772b2052f9c36a71099f006dffd50d6e224ced). Post-merge [Frontend main CI 39847035820](https://github.com/sholehamed/Shinera-frontend/actions/runs/39847035820): **successful** (build + 14 Vitest).
 - **Open P0 security debt (not concealed by green CI):** role/permission revalidation during token refresh [Issue #4](https://github.com/sholehamed/Shinera-backend/issues/4) and complete ADR-003 platform authorization with controlled production bootstrap and signing material [Issue #5](https://github.com/sholehamed/Shinera-backend/issues/5). Userinfo/Logout flow and positive auth integrations also remain unverified.
 - E2E in current workflow runs for PRs and manual dispatch, **not** on pushes to main. The 9/9 evidence is a final PR-head run against backend main, not a separate full-stack post-merge main run.
+
+
+## Token lifecycle hardening started — 2026-10-22
+
+- [Backend draft PR #6](https://github.com/sholehamed/Shinera-backend/pull/6) on `security/identity-token-lifecycle-20261022`: verify current account state, tenant, security stamp, role/permission snapshot before token refresh, and database-check current superadmin status on privileged API calls. Adds a standard OAuth revocation endpoint.
+- [Frontend draft PR #3](https://github.com/sholehamed/Shinera-frontend/pull/3) on `test/identity-token-lifecycle-20261022`: real System admin login, refresh, revocation, non-admin 403, and browser login. Uses disposable Development-only CAPTCHA and credentials; temporary backend branch checkout.
+- [Backend CI 39848876548](https://github.com/sholehamed/Shinera-backend/actions/runs/39848876548) passed after a compile fix. E2E results pending.
+- [Detailed engineering record](IDENTITY-TOKEN-LIFECYCLE-2026-10-22.md).
+
+- [Backend current security branch CI](https://github.com/sholehamed/Shinera-backend/actions/runs/39850718533): **21/21 xUnit passed** including two SQLite-backed persisted-role-removal and disabled-account checks; Build successful. An earlier attempt exposed SQLite vs SQL Server rowversion behavior, corrected in test-only EF model.
+- [Frontend real-login Full-stack run](https://github.com/sholehamed/Shinera-frontend/actions/runs/39849080037): **13/13 Playwright passed** using actual ASP.NET Core + SQL Server, including admin UserInfo, refresh, OAuth revoke, non-admin 403, browser login. [Frontend CI after logout changes](https://github.com/sholehamed/Shinera-frontend/actions/runs/39849729956): **16/16 Vitest passed**. A more recent Full-stack run for the latest frontend commit is still awaiting completion.
+- Both code PRs remain **Draft**, unmerged. Frontend E2E uses the backend feature branch until its security PR is merged. Keep docs and checks synchronized.
+
+## Final review and merged results — 2026-10-22
+
+- [Backend PR #6](https://github.com/sholehamed/Shinera-backend/pull/6) **merged** via [b2f1beb3](https://github.com/sholehamed/Shinera-backend/commit/b2f1beb301ef1e4ae76a64e9351fa8b3c2632d89). [Final Backend CI](https://github.com/sholehamed/Shinera-backend/actions/runs/39852308481): **21/21 xUnit passed**, Release Build succeeded.
+- Final review fixed existing seeded OpenIddict clients lacking Revocation permission; the stored application descriptor is preserved and only the missing permission is added.
+- Frontend E2E no longer checks out a temporary backend branch; [Full-stack CI](https://github.com/sholehamed/Shinera-frontend/actions/runs/39852565729) with merged backend main passed **13/13 Playwright** including real admin login, refresh, revocation and non-admin 403.
+- [Frontend PR #3](https://github.com/sholehamed/Shinera-frontend/pull/3) **merged** via [3e30c547](https://github.com/sholehamed/Shinera-frontend/commit/3e30c547eb9a5dd9cc535ae877a3c56bf533213a). [Final PR-head Frontend CI](https://github.com/sholehamed/Shinera-frontend/actions/runs/39852565679): **16/16 Vitest passed** with Angular build.
+- Remaining: SQL Server token/role/tenant mutation and replay/rotation scenarios, full ADR-003 permissions, production key/client provisioning and JWT invalidation outside System admin endpoints. E2E runs on PR/dispatch, not automatically on main push.
+
+- Post-merge main CI also succeeded: [Backend run 39852527044](https://github.com/sholehamed/Shinera-backend/actions/runs/39852527044) for commit b2f1beb3 and [Frontend run 39852951954](https://github.com/sholehamed/Shinera-frontend/actions/runs/39852951954) for commit 3e30c547. The independent full-stack run 39852565729 is the final frontend **PR-head** E2E against backend main, not a separate post-merge E2E.
