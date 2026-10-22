@@ -22,3 +22,11 @@ See [Phase engineering record](PLATFORM-ROLE-WRITES-2026-10-23.md).
 
 - Added independently testable `AuthorizedPlatformMasterWrite` gateway and a SQL Server post-issuance role-revocation/scope-lifetime test. [Backend CI 39869241494](https://github.com/sholehamed/Shinera-backend/actions/runs/39869241494) passed **21/21**; [SQL Server CI 39869241918](https://github.com/sholehamed/Shinera-backend/actions/runs/39869241918) passed **13/13** and live HTTP role-create/forbidden-write smoke.
 - Review note: Role API endpoints still use `PlatformRoleWriteExecutor`, which duplicates parts of the new gateway's live checks. Consolidation and broader CRUD/fine-grained permission tests are still required; no merge performed.
+
+
+## Final review: single verified write gateway
+
+- Consolidated duplicated live-account, master-role and tenant checks in **one** `AuthorizedPlatformMasterWrite.BeginAsync` gateway. `PlatformRoleWriteExecutor` now delegates to this gateway and handles only operation execution and logging.
+- Validates optional target Role ownership in the fixed Master Tenant **before** privileged read/write scopes are opened; missing/foreign role ids fail closed.
+- Existing SQL Server regression constructors were updated to invoke the real executor through this gateway. All Role CRUD HTTP routes remain protected by `SystemAdministrator` as well.
+- The refactor is isolated in [backend commit cb6e4eb3](https://github.com/sholehamed/Shinera-backend/commit/cb6e4eb3e83cd367a3efff94df97c3c8472d6246). Latest CI [Backend](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951318) and [SQL Server](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951465) must be checked before merging. These URLs are evidence pointers, **not yet success claims**.
