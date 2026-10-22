@@ -36,7 +36,7 @@
 
 | Gate | Evidence | Current result |
 |---|---|---|
-| Backend CI (Release Build + xUnit) | [Run 39858625068](https://github.com/sholehamed/Shinera-backend/actions/runs/39858625068) | **21/21 passed** on initial PR head; latest head re-run pending |
+| Backend CI (Release Build + xUnit) | [Final head run 39859081756](https://github.com/sholehamed/Shinera-backend/actions/runs/39859081756) | **21/21 passed**, Release Build successful |
 | Real SQL Server integration | [Run 39858625169](https://github.com/sholehamed/Shinera-backend/actions/runs/39858625169) | **6/6 passed** on initial PR head; latest head re-run pending |
 | Full-stack authorized System API endpoints under new requirement | Not yet activated | Not implemented |
 | Branch and Own authorization | Current domain persistence incomplete | Design/dependency only |
