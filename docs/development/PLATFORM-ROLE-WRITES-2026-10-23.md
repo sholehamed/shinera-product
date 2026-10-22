@@ -35,9 +35,9 @@
 
 | Test | Status | Evidence |
 |---|---|---|
-| Backend Build + unit tests | Pending latest head validation | [Backend PR #12 checks](https://github.com/sholehamed/Shinera-backend/pull/12/checks) |
-| SQL Server migration/role/assignment tests | Pending latest head validation | [Backend PR #12 checks](https://github.com/sholehamed/Shinera-backend/pull/12/checks) |
-| API-level role CRUD and authorization HTTP statuses | Not yet fully exercised | Add E2E cases |
+| Backend Build + unit tests | **21/21 passed, Build successful** | [Backend CI run 39868009455](https://github.com/sholehamed/Shinera-backend/actions/runs/39868009455) |
+| SQL Server migration/role/assignment tests | **12/12 passed** | [SQL Server CI run 39868009445](https://github.com/sholehamed/Shinera-backend/actions/runs/39868009445) |
+| API-level Role HTTP smoke | **Passed** — real seeded System login, protected GET, Role POST 201, invalid-scope permission PUT 403 | [SQL Server CI run 39868009445](https://github.com/sholehamed/Shinera-backend/actions/runs/39868009445); other CRUD routes not yet E2E-tested |
 | Production migration/role grant bootstrap | Not implemented | Requires separate rollout decision |
 
 ## Recorded implementation issues
@@ -52,3 +52,10 @@
 - Role mutation endpoints now return `ForbidHttpResult` on failed live write validation; endpoint-level middleware still requires `SystemAdministrator`.
 - Regression workflow exercises an actual RoleCreate path with migrated SQL Server and rejects invalid master RolePermission target with 403.
 - Security caveat: coarse SystemAdministrator continues to authorize these operations until a controlled Resource.Action catalog with grants and upgrade path exists. Logging actor and operation does not by itself constitute a durable tamper-evident audit ledger.
+
+## Verified latest head — 2026-10-23
+
+- Backend [run 39868009455](https://github.com/sholehamed/Shinera-backend/actions/runs/39868009455) succeeded: Release Build and **21/21 xUnit**.
+- Disposable SQL Server [run 39868009445](https://github.com/sholehamed/Shinera-backend/actions/runs/39868009445) succeeded: real migrations, **12/12 integration tests**, and application startup/seed/admin login with protected Roles GET plus Role POST (201) and out-of-scope permission PUT (403).
+- Security hardening also tightened `ActiveSystemAdministratorHandler` to require active master-scoped SuperAdmin assignment, not a lookalike role granted by an arbitrary tenant. Existing SQLite/SQL Server fixtures were updated to reflect this invariant; interim failing checks are not presented as final results.
+- All changes are in the new feature branch. **No merge has been performed.** Complete Permission catalog CRUD, PUT/DELETE/PATCH HTTP integration and durable authorization audit remain Issue #11 follow-ups.

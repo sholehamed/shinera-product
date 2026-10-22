@@ -10,3 +10,12 @@
 - **No code merged.** Fine-grained permission catalog, real HTTP status tests, production migration and full permission CRUD remain open.
 
 See [Phase engineering record](PLATFORM-ROLE-WRITES-2026-10-23.md).
+
+## Final verified branch CI results (not merged)
+
+- Updated all System Role writes to return explicit 403 when the trusted scope or live authorization check fails.
+- Extended SQL Server workflow to perform actual System admin RoleCreate POST, expecting HTTP 201, and invalid target RolePermission PUT expecting HTTP 403. A real foreign-Tenant Role is rejected in the isolated SQL Server executor tests.
+- Restricted `ActiveSystemAdministratorHandler` role assignments to both master-scoped UserRole and master-scoped Role, fixing possible cross-Tenant role-name spoofing.
+- [Backend CI 39868009455](https://github.com/sholehamed/Shinera-backend/actions/runs/39868009455): **21/21 passed** and Build successful.
+- [SQL Server CI 39868009445](https://github.com/sholehamed/Shinera-backend/actions/runs/39868009445): **12/12 integration tests passed**; real HTTP API startup/login, Role POST 201 and out-of-scope RolePermissions PUT 403 also passed.
+- Backend PR #12 and Product PR #8 remain **Draft; not merged**. Issue #11 remains open for complete permission catalog CRUD, durable audit, production bootstrap and expanded API tests.
