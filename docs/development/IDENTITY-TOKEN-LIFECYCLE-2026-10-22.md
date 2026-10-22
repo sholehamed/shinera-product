@@ -35,7 +35,7 @@
 ## Scope, deployment risks, and missing tests
 
 - **Do not enable Development/E2E flags in production.** E2E seed identities/passwords are disposable and must never be reused outside isolated test databases.
-- Existing OpenIddict client registrations may need an explicit production-safe migration to receive revocation endpoint permission; the current seed only creates a client when missing.
+- Pre-existing seeded OpenIddict client registrations previously lacked revocation permission because the seeder only created missing clients. **Fixed in Backend PR #6**: update only the missing `Revocation` permission while preserving the existing client's other configuration. A separately managed production client/bootstrap model is still outstanding.
 - The pre-existing `GET/POST /Auth/logout` OIDC end-session handler remains separate from OAuth refresh-token revocation. The browser `AuthService.logout()` now uses the standard revocation endpoint. Revocation failure cannot be treated as confirmed server-side sign-out, though the local session is cleared.
 - OpenIddict does not automatically validate existing JWT token DB records on each ordinary API request; the added handler protects privileged System endpoints, not every generic endpoint. **Revoking a refresh token does not imply immediate invalidation of a previously issued JWT access token** on arbitrary APIs; access token revocation/session policies need a separate design and tests.
 - Dynamic per-resource API permission checks remain a separate ADR-003 milestone. Non-admin 403 must be verified end-to-end; the backend handler's passing tests alone do not prove it.
@@ -64,4 +64,8 @@
 
 - Latest Frontend CI and E2E after corresponding logout client changes; see final GitHub Actions runs before marking complete. Browser logout sends revocation best-effort and clears local state immediately; network failure cannot guarantee server-side revocation.
 - SQLite EF Core mutation tests now validate removal of the admin role and account deactivation against `RefreshGrantValidator` and the privilege handler. **SQL Server-specific** mutation/integration tests, tenant-status changes, and OpenIddict refresh rotation/replay handling remain P0.
-- For existing OpenIddict clients, a supported production migration enabling the standard revocation endpoint permission.
+- CI verification of additive OpenIddict application permission update on already-seeded installations; production client management/bootstrap remains a separate security consideration.
+
+## Final review discovery (2026-10-22)
+
+The security review uncovered a real compatibility issue in `DefaultIdentitySeedContributor.SeedOpenIddictAsync`: a previously existing public client `postman` was not updated with OpenIddict's `Revocation` endpoint permission. This meant the frontend's new server-side logout could be rejected on databases created before this feature. Backend PR #6 was patched to populate the **existing** application descriptor, append just the missing revocation permission, and update the existing object, without overwriting the client's other values. [OpenIddict endpoint permissions](https://documentation.openiddict.com/configuration/application-permissions) require this grant. The patch must pass its own latest backend CI before merge.
