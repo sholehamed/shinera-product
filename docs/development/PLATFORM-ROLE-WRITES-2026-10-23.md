@@ -25,8 +25,8 @@
 
 - This is the **Role write slice**, not finished catalog-level Permission CRUD, UserRole/GroupRole assignment, complete ADR-003 grant migration, or production System permissions.
 - The built-in SystemAdministrator gate currently protects these endpoints. Future fine-grained `RequireSystemPermission("roles", "manage")` requires a backward-compatible catalog + grant bootstrap, otherwise existing admins will be locked out.
-- The endpoint path must return a **403** on failed live authorization, not a generic 500; validate this with real HTTP integration tests.
-- Tests must verify the actual ASP.NET Core POST/PUT/DELETE/PATCH endpoints against the disposable SQL Server (as well as service/EF tests). Positive role creation and forbidden foreign-role mutation must be proven before merge.
+- The Role mutating endpoint handlers now catch denied platform-scope operations and return an explicit HTTP **403** instead of a generic 500. Real HTTP testing is added to the SQL Server CI workflow; its final run must pass before merging.
+- The SQL Server CI now sends an actual authorized HTTP POST to create a platform Role and expects 201, followed by a forbidden role-permission write expecting 403. Complete PUT/DELETE/PATCH route coverage is still a follow-up. Existing CI runs before this addition do not prove these requests.
 - The System user cannot select an arbitrary TenantId, and the master scope remains a legacy storage detail, not a parent tenancy.
 - Role writes performed outside this executor must still fail through the interceptor. Bypass via EF bulk or raw SQL is a separate audit item.
 - [Issue #9](https://github.com/sholehamed/Shinera-backend/issues/9) remains open until all tenant-write acceptance criteria and bypass reviews are completed.
@@ -44,3 +44,11 @@
 
 - Initial Build failed because `System.Text.Json.Serialization.JsonIgnore` in System-prefixed namespaces resolved to a project namespace. Fixed by using `global::System.Text.Json.Serialization.JsonIgnore`, with new CI run.
 - Keep all PRs Draft until latest CI and complete security regression review.
+
+## Additional review changes
+
+- Hardened the existing `ActiveSystemAdministratorHandler`: only SuperAdmin assignments whose `UserRole.TenantId` **and** `Role.TenantId` match the fixed Master Tenant scope can authorize an active platform administrator. A foreign Tenant cannot grant System administrator status by creating a role named SuperAdmin.
+- Updated original SQLite and SQL Server authorization regression fixtures to use the actual Master definition scope, not a random tenant identifier.
+- Role mutation endpoints now return `ForbidHttpResult` on failed live write validation; endpoint-level middleware still requires `SystemAdministrator`.
+- Regression workflow exercises an actual RoleCreate path with migrated SQL Server and rejects invalid master RolePermission target with 403.
+- Security caveat: coarse SystemAdministrator continues to authorize these operations until a controlled Resource.Action catalog with grants and upgrade path exists. Logging actor and operation does not by itself constitute a durable tamper-evident audit ledger.
