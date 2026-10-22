@@ -9,6 +9,7 @@
 - [First SQL Server run 39854609746](https://github.com/sholehamed/Shinera-backend/actions/runs/39854609746) **passed 2/2 SQL Server integration tests** and applied real EF Core migrations on disposable databases; [Backend CI 39854609492](https://github.com/sholehamed/Shinera-backend/actions/runs/39854609492) also passed.
 - Implemented explicit Tenant-scope Resource + Action authorization requirement and a default-deny DB-backed handler; supports direct/role/group grants while checking user and Tenant identity, active membership and resource/action key. No URL-derived permissions or assumptions about System accounts.
 - Added third SQL Server regression covering valid/invalid resource action, revoked role grant, direct grant, cross-Tenant denial and tenant deactivation.
-- **Still Draft; not merged.** Latest CI of permission handler and third test to be inspected and linked.
+- [Latest SQL Server CI 39855144821](https://github.com/sholehamed/Shinera-backend/actions/runs/39855144821): **3/3 integration tests passed**, including explicit `Resource.Action` permission acceptance, default deny, grant revocation and cross-tenant checks. [Backend CI 39855144815](https://github.com/sholehamed/Shinera-backend/actions/runs/39855144815): Release Build succeeded, **21/21 xUnit passed**.
+- **Still Draft; not merged.** Tenant-scope handler is not yet wired to business endpoints (business modules are not in current code), and Branch/Own/Child, System fine-grained permissions and subscription gating remain open.
 
 - **No code merged**; new SQL Server CI evidence to be attached after execution.
