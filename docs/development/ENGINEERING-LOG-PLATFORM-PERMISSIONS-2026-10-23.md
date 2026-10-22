@@ -6,7 +6,7 @@
 - Added development/CI-only opt-in grant bootstrap for active master-scoped SuperAdmin, separate from Catalog seed.
 - Added feature flag `Identity:PlatformPermissions:EnforceRoleEndpoints` (off by default) to attach `RequireSystemPermission` to five mutating Role endpoints while retaining live `SystemAdministrator`.
 - Added actual SQL Server regression for catalog idempotence, default-deny permissions, deliberate role grants, revocation persistence and disabled-permission preservation.
-- CI disposable real API enables opt-in granular Role policies and temporary Development grant bootstrap. Final-head CI still pending at the time of initial record.
+- CI disposable real API enables opt-in granular Role policies and temporary Development grant bootstrap. Final-head CI verified: [Backend CI 39872147609](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147609) **21/21 xUnit + Release Build passed**; [SQL Server CI 39872147628](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147628) **14/14 integrations and real HTTP System role smoke passed**. Initial CI compile failed due to missing configuration extension import; corrected in the same feature branch and rerun green.
 - **No merge, no production privilege grant and no production enforcement.** See [detailed phase record](PLATFORM-PERMISSION-CATALOG-2026-10-23.md).
 
 Follow-up: complete catalog-controlled Permission CRUD and durable audit, prepare one-time reviewed Production grant migration, expand HTTP 401/403 and dynamic-revocation tests, review raw SQL/bulk write paths.
