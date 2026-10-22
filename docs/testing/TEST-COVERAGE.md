@@ -77,4 +77,4 @@ This latest baseline supersedes the older table above for current counts and cov
 
 - [Backend PR #13](https://github.com/sholehamed/Shinera-backend/pull/13): SQL Server integration test for catalog idempotence, no implicit grant, explicit Development grant, revoked grant persistence, and inactive permission preservation.
 - Real Development app smoke opts into granular Role policy with deliberate disposable test bootstrap; existing Role POST and foreign-scope 403 are checked.
-- **Verification pending final PR-head CI.** Production migration, complete granular System/Permission CRUD, HTTP permission revocation and SQL bulk/raw write isolation have not been validated.
+- **Latest PR-head checks passed:** [Backend CI 39872147609](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147609) **21/21** and [SQL Server CI 39872147628](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147628) **14/14**, plus API smoke. Production migration, complete granular System/Permission CRUD, HTTP permission revocation and SQL bulk/raw write isolation have not been validated.
