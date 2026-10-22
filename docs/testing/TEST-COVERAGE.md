@@ -63,3 +63,11 @@ This latest baseline supersedes the older table above for current counts and cov
 - [SQL Server CI 39863656779](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656779): **10/10 SQL Server tests passed** (includes 4 new write isolation cases and previous 6), plus real app migrations/seed/admin login/Roles GET smoke.
 - Tests cover normal in-tenant insert/update, cross-tenant add/update/delete, tenant-id reassignment, synchronous/async writes, scoped platform-master writes, startup bootstrap and disposal boundaries.
 - **Not covered:** full System Role/Permission CRUD + HTTP authorization under trusted write scope ([#11](https://github.com/sholehamed/Shinera-backend/issues/11)); bulk/raw SQL and manual DbContexts; full P0 acceptance ([#9](https://github.com/sholehamed/Shinera-backend/issues/9)). The SQL Server test result above is the last PR-head run, not a separate main push run.
+
+
+## Platform Role write authorization — merged 2026-10-23
+
+- [Final Backend CI 39869951318](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951318): **21/21 xUnit passed** and Release Build successful.
+- [Final SQL Server integration 39869951465](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951465): **13/13 tests passed**, including Role master writes, role revocation, foreign-role denial, replacement rollback and existing tenant isolation suites.
+- Same SQL Server CI completed real API migrations/seed, System admin login, GET Roles, Role POST **201** and invalid role permission PUT **403**. Full authorized PUT/DELETE/PATCH HTTP coverage is not yet proved.
+- [Backend PR #12](https://github.com/sholehamed/Shinera-backend/pull/12) merged at [`3c3e2fce`](https://github.com/sholehamed/Shinera-backend/commit/3c3e2fce55b2c92dcfe10221ce1158a174c43dc2); these counts are final PR-head checks (not independent post-merge SQL Server runs). No production permission catalog migration or durable audit is implemented.
