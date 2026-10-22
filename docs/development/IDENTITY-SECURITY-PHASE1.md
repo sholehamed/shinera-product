@@ -25,7 +25,7 @@
 ## Verification inventory
 
 - Backend PR #3 GitHub Actions: [CI run 39843466153](https://github.com/sholehamed/Shinera-backend/actions/runs/39843466153) — **19 xUnit passed; build successful** on first security branch commit.
-- Frontend PR #2 Full-stack CI: [Actions overview](https://github.com/sholehamed/Shinera-frontend/actions) — negative API tests run against backend feature branch; see PR checks for final status. At document creation, check results for its latest commit were not yet confirmed.
+- Frontend PR #2 latest [Full-stack CI run 39844816502](https://github.com/sholehamed/Shinera-frontend/actions/runs/39844816502): **9/9 Playwright tests passed** with Angular, real ASP.NET Core (backend feature branch) and disposable SQL Server. Negative cases assert anonymous System denial, tenant-mutation denial, malformed CAPTCHA `invalid_grant`, and missing login context. [Frontend CI run](https://github.com/sholehamed/Shinera-frontend/actions/runs/39844816322) covers build and Vitest.
 - Existing baseline: [10 xUnit](https://github.com/sholehamed/Shinera-backend/actions/runs/39841510200), [14 Vitest](https://github.com/sholehamed/Shinera-frontend/actions/runs/39841585176), [5 full-stack Playwright smoke](https://github.com/sholehamed/Shinera-frontend/actions/runs/39839196568).
 
 ## Remaining P0 work and limitations
