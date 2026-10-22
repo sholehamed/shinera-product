@@ -42,3 +42,11 @@
 | Main branch merge | Not performed | Await review |
 
 All results, fixes, risk decisions, PR and merge commit hashes must be added to this document and dated engineering log before treating this phase as done.
+
+## Initial CI and compatibility findings — 2026-10-23
+
+- [Backend CI run 39863193504](https://github.com/sholehamed/Shinera-backend/actions/runs/39863193504) passed **21/21 xUnit** on the initial interceptor/test commit.
+- [SQL Server integration run 39863193517](https://github.com/sholehamed/Shinera-backend/actions/runs/39863193517) passed **10/10** (6 existing plus 4 new write-isolation regressions).
+- Later commit [b4733673](https://github.com/sholehamed/Shinera-backend/commit/b4733673be4874f9a9a5a9b027b27ea78bb6d8ee) added a real API startup + seed + admin login/role lookup smoke step to the SQL workflow. Its result must be checked separately before considering bootstrap compatibility verified.
+- Inspection of current `RoleCreateCommandHandler` found that a System role created from the existing command mapping has no explicit master storage `TenantId`. With default-deny writes this will correctly be refused unless a dedicated, authorized platform writer supplies the master scope. The prior implementation also could not assign an ActiveTenantId for a System user. **Do not silently fix this by letting every System request pick arbitrary TenantIds.** This is a follow-up needed before platform Role CRUD production rollout.
+- Only DbContexts registered through the normal module dependency-injection/interceptor pipeline receive this EF interceptor. Raw SQL, bulk writes, and manual DbContext construction require independent access reviews.
