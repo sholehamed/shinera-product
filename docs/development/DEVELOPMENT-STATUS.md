@@ -65,3 +65,8 @@ Actual current repository code is the source of truth for what exists; PRD/backl
 ## Platform Role write foundation merged — 2026-10-23
 
 [Backend PR #12 — Merged](https://github.com/sholehamed/Shinera-backend/pull/12) ([`3c3e2fce`](https://github.com/sholehamed/Shinera-backend/commit/3c3e2fce55b2c92dcfe10221ce1158a174c43dc2)) provides a live-validated, master-scoped executor for System Role CRUD/state/permission replacement, plus explicit 403 refusal and narrowed SuperAdmin membership. **21/21 xUnit**, **13/13 SQL Server integration**, and actual System Role POST 201/invalid-target PUT 403 smoke passed on the final feature-branch head. The changes are now **merged to main**. Full platform Permission catalog CRUD, durable operation audit, grant bootstrap/migration and expanded HTTP regression remain tracked in [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11). [Technical record](PLATFORM-ROLE-WRITES-2026-10-23.md).
+
+
+## In progress — staged System Permission Catalog (2026-10-23)
+
+[Backend Draft PR #13](https://github.com/sholehamed/Shinera-backend/pull/13) adds stable platform Role/Permission Resource.Action definitions, additive catalog-only startup seed, optional Development-only SuperAdmin grants and an OFF-by-default enforcement switch for five System Role mutation endpoints. This does **not** enable granular policies in Production or perform a production grant migration; existing SystemAdministrator remains in place. The Role/Permission CRUD rollout, reviewable production migration, HTTP grant/revocation test matrix and audit remain open under [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11). [Detailed notes](PLATFORM-PERMISSION-CATALOG-2026-10-23.md).
