@@ -32,6 +32,8 @@
 Actual current repository code is the source of truth for what exists; PRD/backlog/ADRs determine correct behavior. No inherited completion status from old implementation branches. Record each completed PR and its test evidence in `ENGINEERING-LOG-YYYY-MM-DD.md`.
 
 
-## In progress: Identity/System Security — 2026-10-22
+## Identity/System Security baseline merged — 2026-10-22
 
-Security hardening is actively being developed in [Backend PR #3](https://github.com/sholehamed/Shinera-backend/pull/3) and negative API testing in [Frontend PR #2](https://github.com/sholehamed/Shinera-frontend/pull/2). Changes are **not yet merged to main**. Initial Backend CI: 19 unit tests passed. This does not claim completion of fine-grained ADR-003 permission enforcement or refresh-token revocation. See [Phase 1 record](IDENTITY-SECURITY-PHASE1.md).
+[Backend PR #3](https://github.com/sholehamed/Shinera-backend/pull/3) ([merge 6d9432f8](https://github.com/sholehamed/Shinera-backend/commit/6d9432f8cd6645b2acb8fce864031f0020483fb8)) and [Frontend PR #2](https://github.com/sholehamed/Shinera-frontend/pull/2) ([merge af772b2](https://github.com/sholehamed/Shinera-frontend/commit/af772b2052f9c36a71099f006dffd50d6e224ced)) are merged to `main`. [Backend main CI](https://github.com/sholehamed/Shinera-backend/actions/runs/39846613412) passed **19 xUnit**; [final full-stack PR E2E](https://github.com/sholehamed/Shinera-frontend/actions/runs/39846647097) passed **9 Playwright** including anonymous 401 on all twelve System management groups and malformed CAPTCHA `invalid_grant`. Angular/Vitest CI on the final PR head passed 14 tests.
+
+**Scope boundary:** This is an initial security baseline, **not complete Identity security**. Granular ADR-003 permissions, positive admin token lifecycle tests, refresh authorization revalidation, production certificates and role bootstrap are outstanding ([Issue #4](https://github.com/sholehamed/Shinera-backend/issues/4), [Issue #5](https://github.com/sholehamed/Shinera-backend/issues/5)). See [Phase 1 record](IDENTITY-SECURITY-PHASE1.md).

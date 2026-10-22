@@ -24,8 +24,8 @@
 | P2 | RTL/accessibility, responsive and cross-browser tests |
 
 
-## Security test work in progress (not part of main baseline)
+## Security baseline merged into main
 
-- Backend security branch: 9 additional policy/CAPTCHA unit tests, totaling **19/19** in the initial security PR CI ([run 39843466153](https://github.com/sholehamed/Shinera-backend/actions/runs/39843466153)).
-- Frontend security PR #2: **9/9 full-stack Playwright passed** ([run 39844816502](https://github.com/sholehamed/Shinera-frontend/actions/runs/39844816502)): 5 existing smoke tests plus 4 new negative security cases (anonymous privileged endpoint access, anonymous mutation, malformed CAPTCHA, missing login context). Against unmerged backend feature branch and disposable SQL Server; not yet merged into main.
-- **Not covered yet:** positive admin login, permission revocation, OpenIddict refresh/logout lifecycle, production role/bootstrap migration, tenant cross-write integration cases.
+- Backend `main`: **19/19 xUnit passed** (10 original + 9 additional policy/CAPTCHA) — [post-merge main CI 39846613412](https://github.com/sholehamed/Shinera-backend/actions/runs/39846613412).
+- Frontend merged PR #2: **9/9 full-stack Playwright passed** ([final pre-merge run 39846647097](https://github.com/sholehamed/Shinera-frontend/actions/runs/39846647097)): 5 original smoke tests + 4 negative security cases (anonymous access to all 12 management groups, anonymous tenant mutation, malformed CAPTCHA, missing login context). Uses the merged backend **main** and disposable SQL Server. E2E workflow runs on PR and manual dispatch, not `main` push.
+- **Not covered yet:** positive admin login, authenticated non-admin 403, permission revocation, OpenIddict refresh/logout lifecycle, production role/bootstrap migration, tenant cross-write integration cases. [Issue #4](https://github.com/sholehamed/Shinera-backend/issues/4), [Issue #5](https://github.com/sholehamed/Shinera-backend/issues/5).
