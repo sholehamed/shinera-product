@@ -38,7 +38,7 @@
 |---|---|---|
 | Backend xUnit & Release Build | **21/21 passed** | [Final head run 39863656917](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656917) |
 | Real SQL Server migration/write-isolation tests | **10/10 passed** | [Final head run 39863656779](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656779) |
-| Startup/API compatibility with System role management | Not yet verified | Further integration tests required |
+| Startup migrations/seed + real admin login and protected Roles lookup | **Passed** | [SQL Server CI 39863656779](https://github.com/sholehamed/Shinera-backend/actions/runs/39863656779) — limited to startup/login/GET; mutating Role CRUD still requires a dedicated platform write operation |
 | Main branch merge | Not performed | Await review |
 
 All results, fixes, risk decisions, PR and merge commit hashes must be added to this document and dated engineering log before treating this phase as done.
