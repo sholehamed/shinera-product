@@ -37,3 +37,5 @@ See [Phase engineering record](PLATFORM-ROLE-WRITES-2026-10-23.md).
 - Reviewed and passed [Backend CI 39869951318](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951318) **21/21** and [SQL Server CI 39869951465](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951465) **13/13**, including real API login/Role create 201 and cross-scope permission PUT 403.
 - [Backend PR #12](https://github.com/sholehamed/Shinera-backend/pull/12) **squash merged** to main at [`3c3e2fce`](https://github.com/sholehamed/Shinera-backend/commit/3c3e2fce55b2c92dcfe10221ce1158a174c43dc2), source head `cb6e4eb3`.
 - Issue #11 remains open for complete Permission CRUD, platform Resource.Action catalog/grant migration, full HTTP/rollback coverage and durable audit. Issue #9 remains open for bulk/raw write-path audit and remaining cross-tenant write acceptance.
+
+- Post-merge [Backend main CI 39870192240](https://github.com/sholehamed/Shinera-backend/actions/runs/39870192240) also **succeeded** for merge commit `3c3e2fce`. The 13/13 SQL Server suite was verified on the final PR head, not automatically on main push.
