@@ -36,7 +36,7 @@
 - **Do not enable Development/E2E flags in production.** E2E seed identities/passwords are disposable and must never be reused outside isolated test databases.
 - Existing OpenIddict client registrations may need an explicit production-safe migration to receive revocation endpoint permission; the current seed only creates a client when missing.
 - The pre-existing `GET/POST /Auth/logout` OIDC end-session handler remains separate from OAuth refresh-token revocation. The browser `AuthService.logout()` now uses the standard revocation endpoint. Revocation failure cannot be treated as confirmed server-side sign-out, though the local session is cleared.
-- OpenIddict does not automatically validate existing JWT token DB records on each ordinary API request; the added handler protects privileged System endpoints, not every generic endpoint.
+- OpenIddict does not automatically validate existing JWT token DB records on each ordinary API request; the added handler protects privileged System endpoints, not every generic endpoint. **Revoking a refresh token does not imply immediate invalidation of a previously issued JWT access token** on arbitrary APIs; access token revocation/session policies need a separate design and tests.
 - Dynamic per-resource API permission checks remain a separate ADR-003 milestone. Non-admin 403 must be verified end-to-end; the backend handler's passing tests alone do not prove it.
 - Account/security-stamp/role revocation after an issued refresh token still needs database mutation integration tests and token rotation/reuse coverage.
 - If E2E fails, keep this document updated with exact CI run ID, failure and fix; do not represent WIP as complete.
@@ -58,6 +58,6 @@
 
 ## Still pending at next review
 
-- Final Frontend CI with new logout unit tests and E2E after corresponding frontend source changes.
+- Latest Frontend CI and E2E after corresponding logout client changes; see final GitHub Actions runs before marking complete. Browser logout sends revocation best-effort and clears local state immediately; network failure cannot guarantee server-side revocation.
 - Integration scenario mutating SQL Server user/role/tenant **after** token issuance to verify the refresh guard and per-request database authorization revocation. This remains P0 to avoid counting source inspection as executed evidence.
 - For existing OpenIddict clients, a supported production migration enabling the standard revocation endpoint permission.
