@@ -22,3 +22,10 @@
 | P1 | Business registration, service catalog, staff, schedule, CRM and appointments as implemented |
 | P1 | Appointment concurrency and subscription feature gating |
 | P2 | RTL/accessibility, responsive and cross-browser tests |
+
+
+## Security test work in progress (not part of main baseline)
+
+- Backend security branch: 9 additional policy/CAPTCHA unit tests, totaling **19/19** in the initial security PR CI ([run 39843466153](https://github.com/sholehamed/Shinera-backend/actions/runs/39843466153)).
+- Frontend security PR #2 introduces real-API negative Playwright cases for protected System endpoints, anonymous mutation and CAPTCHA errors; final cross-repository CI has not yet been accepted as a release gate.
+- **Not covered yet:** positive admin login, permission revocation, OpenIddict refresh/logout lifecycle, production role/bootstrap migration, tenant cross-write integration cases.
