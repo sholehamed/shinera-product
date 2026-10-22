@@ -1,7 +1,7 @@
 # Shinera — ADR-003 Platform Permissions, Branch/Own Roadmap
 
 **Date:** 2026-10-23  
-**Status:** In progress — draft PRs, no merge  
+**Status:** Scoped backend foundation merged; broader ADR-003 rollout remains open  
 **Architecture:** [ADR-003](../architecture/decisions/ADR-003-AUTHORIZATION-AND-PERMISSION-MODEL.md), [ADR-001](../architecture/decisions/ADR-001-MULTI-TENANCY-STRATEGY.md)  
 **Code:** [Backend PR #8](https://github.com/sholehamed/Shinera-backend/pull/8)  
 **Tracking:** [Backend P0 Issue #5](https://github.com/sholehamed/Shinera-backend/issues/5)
@@ -36,8 +36,8 @@
 
 | Gate | Evidence | Current result |
 |---|---|---|
-| Backend CI (Release Build + xUnit) | [Final head run 39859081756](https://github.com/sholehamed/Shinera-backend/actions/runs/39859081756) | **21/21 passed**, Release Build successful |
-| Real SQL Server integration | [Final head run 39859082403](https://github.com/sholehamed/Shinera-backend/actions/runs/39859082403) | **6/6 passed** against disposable SQL Server with EF Core migrations |
+| Backend CI (Release Build + xUnit) | [Final head run 39859081756](https://github.com/sholehamed/Shinera-backend/actions/runs/39859081756) | **21/21 passed**, Release Build successful before merge |
+| Real SQL Server integration | [Final head run 39859082403](https://github.com/sholehamed/Shinera-backend/actions/runs/39859082403) | **6/6 passed** against disposable SQL Server with EF Core migrations, before merge |
 | Full-stack authorized System API endpoints under new requirement | Not yet activated | Not implemented |
 | Branch and Own authorization | Current domain persistence incomplete | Design/dependency only |
 
@@ -49,3 +49,12 @@ Do not merge or describe complete until the latest GitHub Actions run reports su
 - [Security P0 issue #9](https://github.com/sholehamed/Shinera-backend/issues/9): `TenantSaveChangesInterceptor` currently has write-scope and TenantId immutability checks commented out. **This is outside the new read-side authorization handler.** It must be fixed with an explicit, audited platform operation path and real SQL Server tests before claiming safe tenant writes.
 - A stored user-level `IsGranted=false` overrides inherited System grants because that is the current database behavior. ADR-003 defers introducing generalized explicit Deny as a **new** model; no migration/ADR change was made in this slice.
 - The existing SystemAdministrator policy remains applied to all current System management endpoint groups; the new `SystemPermissionRequirement` is opt-in and not yet activated on those groups.
+
+## Final review and code merge — 2026-10-23
+
+- [Backend PR #8](https://github.com/sholehamed/Shinera-backend/pull/8) reviewed on head `cd247db8990c456ad63d43127b864e9e074d3d06`: conflict-free, green latest Build/xUnit and SQL Server integration checks. No blocking defect found in the changes added by this PR.
+- **Squash merged** into backend `main` at [`664b8bb9`](https://github.com/sholehamed/Shinera-backend/commit/664b8bb95a3926b292d5ae4703505627a95741c5).
+- Test evidence: [Backend CI 39859081756](https://github.com/sholehamed/Shinera-backend/actions/runs/39859081756) **21/21**; [SQL Server CI 39859082403](https://github.com/sholehamed/Shinera-backend/actions/runs/39859082403) **6/6**. These are final PR-head results, *not* a distinct post-merge SQL Server test.
+- **Scope limitation:** new SystemPermission handler and `RequireSystemPermission` extension are available but not attached to privileged System endpoints. The existing `SystemAdministrator` policy remains active on those endpoints. A controlled permission catalog/bootstrap and real HTTP 401/403 regression are required before activation.
+- **Independent P0 risk:** [tenant write isolation Issue #9](https://github.com/sholehamed/Shinera-backend/issues/9) is **open**; do not consider tenant write safety fully enforced.
+- Branch/Own/Child scope, subscription gating and production OpenIddict credentials remain unimplemented or unverified.
