@@ -1,8 +1,8 @@
 # Shinera — System Role/Permission Write Path — 2026-10-23
 
-**State:** Work in progress; PRs Draft and not merged  
+**State:** Backend Role-write foundation merged; remaining Issue #11 requirements open  
 **Tracked:** [Backend Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11), [Tenant Write Isolation Issue #9](https://github.com/sholehamed/Shinera-backend/issues/9)  
-**Backend:** [PR #12](https://github.com/sholehamed/Shinera-backend/pull/12) (`security/platform-role-permission-writes-20261023`)  
+**Backend:** [PR #12 — Merged](https://github.com/sholehamed/Shinera-backend/pull/12) ([`3c3e2fce`](https://github.com/sholehamed/Shinera-backend/commit/3c3e2fce55b2c92dcfe10221ce1158a174c43dc2))  
 **Product docs:** `docs/platform-role-permission-writes-20261023`
 
 ## Source findings
@@ -43,7 +43,7 @@
 ## Recorded implementation issues
 
 - Initial Build failed because `System.Text.Json.Serialization.JsonIgnore` in System-prefixed namespaces resolved to a project namespace. Fixed by using `global::System.Text.Json.Serialization.JsonIgnore`, with new CI run.
-- Keep all PRs Draft until latest CI and complete security regression review.
+- The final security review and latest CI completed; the backend foundation PR was merged. Follow-up scope still requires separate review.
 
 ## Additional review changes
 
@@ -67,7 +67,7 @@
 - Added a SQL Server regression that confirms active authorized master-scope write succeeds, other-tenant writes fail, the scope does not leak after disposal, revoking the persisted administrator role blocks access despite stale JWT claims, and a forged `tenant_id` claim is rejected.
 - Latest [Backend CI 39869241494](https://github.com/sholehamed/Shinera-backend/actions/runs/39869241494): **21/21 xUnit passed** with Release Build.
 - Latest [SQL Server CI 39869241918](https://github.com/sholehamed/Shinera-backend/actions/runs/39869241918): **13/13 integration tests passed**, plus live server migration/seed/login, authorized Role POST and forbidden cross-scope write.
-- Changes remain on branches and PRs; **no merge**. Issue #11 has remaining per-action fine-grained permission grants, complete Permission CRUD and transaction/rollback tests.
+- At the time of that preliminary review the changes remained on branches. The backend has since merged; Issue #11 still has per-action grants, full Permission CRUD and additional transaction/rollback HTTP integration coverage.
 
 
 ## Final review: single verified write gateway
@@ -75,4 +75,12 @@
 - Consolidated duplicated live-account, master-role and tenant checks in **one** `AuthorizedPlatformMasterWrite.BeginAsync` gateway. `PlatformRoleWriteExecutor` now delegates to this gateway and handles only operation execution and logging.
 - Validates optional target Role ownership in the fixed Master Tenant **before** privileged read/write scopes are opened; missing/foreign role ids fail closed.
 - Existing SQL Server regression constructors were updated to invoke the real executor through this gateway. All Role CRUD HTTP routes remain protected by `SystemAdministrator` as well.
-- The refactor is isolated in [backend commit cb6e4eb3](https://github.com/sholehamed/Shinera-backend/commit/cb6e4eb3e83cd367a3efff94df97c3c8472d6246). Latest CI [Backend](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951318) and [SQL Server](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951465) must be checked before merging. These URLs are evidence pointers, **not yet success claims**.
+- The refactor is isolated in [backend commit cb6e4eb3](https://github.com/sholehamed/Shinera-backend/commit/cb6e4eb3e83cd367a3efff94df97c3c8472d6246). Latest CI [Backend](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951318) and [SQL Server](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951465) were independently verified successful on final head: **21/21 xUnit** and **13/13 SQL Server tests**, including real API login/Role create/forbidden write.
+
+## Final merge record and scope — 2026-10-23
+
+- Final reviewed backend head: `cb6e4eb3e83cd367a3efff94df97c3c8472d6246`. Consolidated platform-role write validation into one live-validated `AuthorizedPlatformMasterWrite` gateway; `PlatformRoleWriteExecutor` delegates to it and logs command execution.
+- [Backend CI](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951318) **21/21 xUnit passed and Release Build succeeded**. [SQL Server integration](https://github.com/sholehamed/Shinera-backend/actions/runs/39869951465) **13/13 passed**, plus real migrated/seeded API System login, authorized Role POST 201 and forbidden out-of-scope permission PUT 403.
+- [Backend PR #12](https://github.com/sholehamed/Shinera-backend/pull/12) squash merged to `main` at [`3c3e2fce`](https://github.com/sholehamed/Shinera-backend/commit/3c3e2fce55b2c92dcfe10221ce1158a174c43dc2).
+- This is a **verified Role management slice**, not a completed full Permission-management system. The existing SystemAdministrator guard remains on the relevant endpoints. Real `RequireSystemPermission` per-action policy activation awaits an explicit catalog/bootstrap/migration; complete Permission CRUD, tamper-resistant audit and full HTTP mutation matrix remain Issue #11 follow-ups.
+- The 13/13 SQL Server evidence is the final **PR-head** workflow execution against disposable SQL Server, not a separate post-merge main-push SQL Server run.
