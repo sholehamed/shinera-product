@@ -47,3 +47,10 @@ This latest baseline supersedes the older table above for current counts and cov
 - [Backend CI 39857222206](https://github.com/sholehamed/Shinera-backend/actions/runs/39857222206): **21/21 xUnit passed**; Release Build successful.
 - Regression cases verify stale platform role and disabled user checks, tenant suspension/filter isolation, Tenant-scope `Resource.Action` grants, direct/role/group grants, explicit denied-user override, tenant consistency and cross-Tenant refusal.
 - **Not yet covered:** real API-level HTTP enforcement by `RequireTenantPermission`, System/Branch/Own/Child scopes, subscription gating, and token replay/rotation. These test counts are the final PR-head checks before backend merge, not an independent SQL Server main-push CI run.
+
+
+## Platform System permission branch — in progress, not main
+
+- [Backend SQL Server CI 39858625169](https://github.com/sholehamed/Shinera-backend/actions/runs/39858625169): **6/6 integration** passed at initial PR head (4 previous + 2 new platform permissions scenarios); [xUnit CI 39858625068](https://github.com/sholehamed/Shinera-backend/actions/runs/39858625068): **21/21**. Latest commit adds stricter real foreign-tenant role-grant coverage; pending final CI.
+- System permissions are validated through DB-backed handler tests but **not yet mapped to real HTTP endpoints**. Do not equate these tests with comprehensive platform permission enforcement.
+- Remaining: Platform endpoint policy metadata & 401/403, Branch/Own scopes, write-scope interceptor P0 [#9](https://github.com/sholehamed/Shinera-backend/issues/9), and production permission bootstrap.

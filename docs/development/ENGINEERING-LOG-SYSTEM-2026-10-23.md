@@ -11,3 +11,6 @@
 - This log records ongoing Draft work: no PR merged and no CI outcome is claimed until confirmed.
 
 [Detailed system permission implementation and rollout plan](SYSTEM-RESOURCE-PERMISSIONS-2026-10-23.md).
+
+- First [Backend CI 39858625068](https://github.com/sholehamed/Shinera-backend/actions/runs/39858625068) **21/21 xUnit passed** and first [SQL Server CI 39858625169](https://github.com/sholehamed/Shinera-backend/actions/runs/39858625169) **6/6 integration tests passed**. A subsequent change expanded the foreign-Tenant grant regression; its final head CI is still being verified.
+- During source review discovered disabled write scope and TenantId immutability in `TenantSaveChangesInterceptor`; recorded [P0 security issue #9](https://github.com/sholehamed/Shinera-backend/issues/9) with explicit platform-write bypass design and SQL Server acceptance tests.

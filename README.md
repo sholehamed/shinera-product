@@ -6,6 +6,8 @@ Canonical product and engineering documentation for [Shinera](https://github.com
 - [Product backlog](docs/product/SHINERA-PRODUCT-BACKLOG.md)
 - [Architecture and ADRs](docs/architecture/ARCHITECTURE-OVERVIEW.md)
 - [Current development status](docs/development/DEVELOPMENT-STATUS.md)
+- [Platform System permission design and CI evidence (in progress)](docs/development/SYSTEM-RESOURCE-PERMISSIONS-2026-10-23.md)
+- [System authorization engineering log](docs/development/ENGINEERING-LOG-SYSTEM-2026-10-23.md)
 - [Engineering log — 2026-10-22](docs/development/ENGINEERING-LOG-2026-10-22.md)
 - [Engineering log — 2026-10-23](docs/development/ENGINEERING-LOG-2026-10-23.md)
 - [SQL Server Identity + ADR-003 permission foundation](docs/development/IDENTITY-SQLSERVER-AUTHORIZATION-2026-10-23.md)

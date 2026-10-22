@@ -36,9 +36,16 @@
 
 | Gate | Evidence | Current result |
 |---|---|---|
-| Backend CI (Release Build + xUnit) | [Backend PR #8 checks](https://github.com/sholehamed/Shinera-backend/pull/8/checks) | Pending |
-| Real SQL Server integration | [Backend PR #8 checks](https://github.com/sholehamed/Shinera-backend/pull/8/checks) | Pending |
+| Backend CI (Release Build + xUnit) | [Run 39858625068](https://github.com/sholehamed/Shinera-backend/actions/runs/39858625068) | **21/21 passed** on initial PR head; latest head re-run pending |
+| Real SQL Server integration | [Run 39858625169](https://github.com/sholehamed/Shinera-backend/actions/runs/39858625169) | **6/6 passed** on initial PR head; latest head re-run pending |
 | Full-stack authorized System API endpoints under new requirement | Not yet activated | Not implemented |
 | Branch and Own authorization | Current domain persistence incomplete | Design/dependency only |
 
 Do not merge or describe complete until the latest GitHub Actions run reports success, security review confirms tenant-scope containment and the scope boundaries above remain explicit.
+
+## Review findings and safety debt
+
+- Cross-Tenant escalation regression expanded: a System user is explicitly given a foreign Tenant role and valid permission assignment; this must **not** confer platform permission despite carrying the same Resource.Action key.
+- [Security P0 issue #9](https://github.com/sholehamed/Shinera-backend/issues/9): `TenantSaveChangesInterceptor` currently has write-scope and TenantId immutability checks commented out. **This is outside the new read-side authorization handler.** It must be fixed with an explicit, audited platform operation path and real SQL Server tests before claiming safe tenant writes.
+- A stored user-level `IsGranted=false` overrides inherited System grants because that is the current database behavior. ADR-003 defers introducing generalized explicit Deny as a **new** model; no migration/ADR change was made in this slice.
+- The existing SystemAdministrator policy remains applied to all current System management endpoint groups; the new `SystemPermissionRequirement` is opt-in and not yet activated on those groups.
