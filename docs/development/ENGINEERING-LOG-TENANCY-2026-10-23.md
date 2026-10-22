@@ -11,3 +11,11 @@
 - Noted System admin CRUD/seed compatibility risk; this must be resolved or explicitly blocked before merge.
 
 [Detailed rationale and verification](TENANT-WRITE-ISOLATION-2026-10-23.md).
+
+## Verification and follow-up
+
+- [Initial Backend CI](https://github.com/sholehamed/Shinera-backend/actions/runs/39863193504): **21/21 xUnit passed**.
+- [Initial SQL Server CI](https://github.com/sholehamed/Shinera-backend/actions/runs/39863193517): **10/10 integration tests passed** (real SQL Server migrations and write-isolation).
+- Added a **new** startup smoke step on backend SQL Server CI that runs the real ASP.NET Core API and tests dev admin login and role lookup after seeding, to detect conflicts with the trusted-bootstrap design; latest result pending.
+- Inspected RoleCreate; missing master scope assignment for current System command means a separate explicit platform-authorized persistence workflow is required. No implicit System write bypass was introduced.
+- PRs remain Draft; no merge requested or performed.
