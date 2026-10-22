@@ -43,3 +43,12 @@
 - No merge of frontend PR #2 while its E2E workflow references backend feature branch. Once backend PR #3 merges, restore backend checkout to `main`, repeat all E2E tests and then merge frontend.
 - A green CI run means only tested behaviors passed. It must not be described as full identity/permission security certification.
 - Preserve reference to [ADR-001](../architecture/decisions/ADR-001-MULTI-TENANCY-STRATEGY.md), [ADR-002](../architecture/decisions/ADR-002-AUTHENTICATION-WITH-OPENIDDICT.md) and [ADR-003](../architecture/decisions/ADR-003-AUTHORIZATION-AND-PERMISSION-MODEL.md).
+
+
+## 2026-10-22 — OpenIddict HTTPS requirement and E2E
+
+The first negative API E2E run [39843886314](https://github.com/sholehamed/Shinera-frontend/actions/runs/39843886314) correctly verified anonymous management denial but found that the token endpoint rejected HTTP requests *at the OpenIddict transport layer* with `invalid_request` / "This server only accepts HTTPS requests". As a result, that run **did not execute** the intended CAPTCHA invalid-grant behavior.
+
+Remediation: the backend now supports `Identity:AllowInsecureHttpForE2E` **only while `IHostEnvironment.IsDevelopment()`**. The frontend CI sets `Identity__AllowInsecureHttpForE2E=true` for disposable local Runner services. The default HTTPS requirement remains enforced for all other environments. **This is a test-only exception, not a recommended deployment setting.**
+
+The E2E regression must be rerun and the exact `invalid_grant` result verified before declaring the CAPTCHA API path validated.
