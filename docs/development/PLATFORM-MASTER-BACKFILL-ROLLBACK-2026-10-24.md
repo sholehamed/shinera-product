@@ -1,7 +1,7 @@
 # P0 Stage 5B — Explicit Master grant backfill and exact rollback
 
-**Status:** CI-verified Draft implementation slice, NOT a Production deployment approval  
-**Backend:** [Stage 5B branch](https://github.com/sholehamed/Shinera-backend/tree/security/platform-master-approved-backfill-rollback-20261024)  
+**Status:** Reviewed and merged offline-only implementation slice. NOT a Production deployment approval  
+**Backend:** [PR #30](https://github.com/sholehamed/Shinera-backend/pull/30) · [merged commit `1c4700a0`](https://github.com/sholehamed/Shinera-backend/commit/1c4700a0910ae80630ae3e4fee651c7ae57ce318)  
 **Tracking:** [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
 **Prior gate:** [Stage 5A reviewed inventory](PLATFORM-MASTER-PRODUCTION-CUTOVER-2026-10-24.md)
 
@@ -48,4 +48,4 @@ A separate production-only offline operator tool, fully reviewed two-person appr
 
 ## CI evidence (backend PR-head only)
 
-Latest Backend head `aad8a86c3ef97d339c86513c815fee32b9f7a760` passed [Build/Unit run 40028775292](https://github.com/sholehamed/Shinera-backend/actions/runs/40028775292) and [real SQL Server and OpenIddict HTTP run 40028775255](https://github.com/sholehamed/Shinera-backend/actions/runs/40028775255), **31/31 SQL Server tests and 89/89 HTTP checks**. This is disposable SQL Server CI evidence, not a Production rehearsal, nor a cryptographically approved execution mechanism. Both PRs remain Draft; the actual cutover is not approved.
+Final Backend PR head `e7b24cc3e7115470d5f230b2850ba26bdabc090e` passed [Build/Unit run 40030147984](https://github.com/sholehamed/Shinera-backend/actions/runs/40030147984) and [real SQL Server and signed OpenIddict HTTP run 40030148013](https://github.com/sholehamed/Shinera-backend/actions/runs/40030148013): **33/33 SQL Server tests and 89/89 real HTTP checks**. Backend PR #30 was reviewed and merged at [`1c4700a0`](https://github.com/sholehamed/Shinera-backend/commit/1c4700a0910ae80630ae3e4fee651c7ae57ce318). This is final PR-head disposable SQL Server CI evidence, **not** a Production rehearsal, cryptographically approved operator execution mechanism, or separate post-merge SQL Server CI. The actual Production backfill/cutover is **not** approved.
