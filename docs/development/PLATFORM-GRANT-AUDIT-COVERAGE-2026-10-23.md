@@ -1,7 +1,7 @@
 # Platform grant audit coverage — GroupMembers and RolePermissions
 
 **Date:** 2026-10-23  
-**Status:** In progress — [backend Draft PR #22](https://github.com/sholehamed/Shinera-backend/pull/22)  
+**Status:** Reviewed and merged backend [PR #22](https://github.com/sholehamed/Shinera-backend/pull/22) into main at [`895fa89f`](https://github.com/sholehamed/Shinera-backend/commit/895fa89fa1204bc55d86a17494e399f8693b4650)  
 **Issue:** [Identity P0 #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
 **Branch:** `security/platform-grant-audit-coverage-20261023`
 
@@ -25,7 +25,7 @@ Real SQL Server regressions explicitly stage these same-target piggyback mutatio
 
 ## Verification and deployment boundary
 
-Real SQL Server integration regression tests exercise idempotent membership changes, changed role-permission sets, injected audit INSERT failures rolling back the corresponding grant, and recovery. Build/Unit and SQL Server CI must pass **on the final PR head** before merge. This document must not claim green checks based on stale commits.
+Real SQL Server integration regression tests exercise idempotent membership changes, changed role-permission sets, injected audit INSERT failures rolling back the corresponding grant, and recovery. [Build/Unit CI 39931302854](https://github.com/sholehamed/Shinera-backend/actions/runs/39931302854) and [SQL Server authorization CI 39931303035](https://github.com/sholehamed/Shinera-backend/actions/runs/39931303035) **passed** on exact final reviewed PR head `28bc0e2ed0abbf4e956580999f741ac1b30d8f2d`, covering the rollback and same-target piggyback regressions. Backend was squash-merged at [`895fa89f`](https://github.com/sholehamed/Shinera-backend/commit/895fa89fa1204bc55d86a17494e399f8693b4650). These are feature-branch checks, not independent post-merge or Production validation.
 
 This is a partial P0 Issue #11 slice. It does **not** add member removals, bypass-proof bulk/legacy grant mutation capture, privileged bootstrap auditing, cryptographic tamper evidence against DBAs, a read-only Audit API, the complete authenticated 401/403/204 HTTP matrix, or approved Production deployment. Production granular enforcement flags remain OFF. The ledger's SQL UPDATE/DELETE trigger offers append-only behavior for ordinary database DML but is not tamper-evident against DDL-capable principals.
 
