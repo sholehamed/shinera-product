@@ -18,6 +18,7 @@ Canonical product and engineering documentation for [Shinera](https://github.com
 - [Real OpenIddict HTTP authorization E2E (merged slice; Issue #11 open)](docs/development/PLATFORM-AUTHORIZATION-HTTP-E2E-2026-10-23.md)
 - [Stale privileged JWT revocation over real HTTP (merged slice; Issue #11 open)](docs/development/PLATFORM-STALE-JWT-HTTP-REVOCATION-2026-10-23.md)
 - [Permission CRUD real HTTP and expected errors (merged slice; Issue #11 open)](docs/development/PLATFORM-PERMISSION-CRUD-HTTP-MATRIX-2026-10-23.md)
+- [Persisted System API 401/403 denial audit (Draft; Issue #11 open)](docs/development/PLATFORM-DENIED-ACCESS-AUDIT-2026-10-23.md)
 - [Staged System Permission Catalog (Draft)](docs/development/PLATFORM-PERMISSION-CATALOG-2026-10-23.md)
 - [Permission Catalog engineering log](docs/development/ENGINEERING-LOG-PLATFORM-PERMISSIONS-2026-10-23.md)
 - [System Role write authorization (merged foundation; Issue #11 follow-ups)](docs/development/PLATFORM-ROLE-WRITES-2026-10-23.md)
