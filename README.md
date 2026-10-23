@@ -13,7 +13,7 @@ Canonical product and engineering documentation for [Shinera](https://github.com
 - [Platform GroupRole grant/revoke (merged slice; Issue #11 open)](docs/development/PLATFORM-GROUP-ROLE-GRANTS-2026-10-23.md)
 - [System UserPermission allow/deny/clear (merged slice; Issue #11 open)](docs/development/PLATFORM-USER-PERMISSION-OVERRIDES-2026-10-23.md)
 - [Transactional SQL grant audit (merged slice; Issue #11 open)](docs/development/PLATFORM-GRANT-TRANSACTIONAL-AUDIT-2026-10-23.md)
-- [Transactional grant audit for GroupMembers and RolePermissions (Draft; Issue #11 open)](docs/development/PLATFORM-GRANT-AUDIT-COVERAGE-2026-10-23.md)
+- [Transactional grant audit for GroupMembers and RolePermissions (merged slice; Issue #11 open)](docs/development/PLATFORM-GRANT-AUDIT-COVERAGE-2026-10-23.md)
 - [Staged System Permission Catalog (Draft)](docs/development/PLATFORM-PERMISSION-CATALOG-2026-10-23.md)
 - [Permission Catalog engineering log](docs/development/ENGINEERING-LOG-PLATFORM-PERMISSIONS-2026-10-23.md)
 - [System Role write authorization (merged foundation; Issue #11 follow-ups)](docs/development/PLATFORM-ROLE-WRITES-2026-10-23.md)
