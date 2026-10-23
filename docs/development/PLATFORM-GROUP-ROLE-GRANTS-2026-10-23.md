@@ -1,8 +1,8 @@
 # Shinera — Restricted platform GroupRole grant and revoke
 
 **Date:** 2026-10-23  
-**Status:** Draft security slice / CI review pending  
-**Backend:** [Draft PR #18](https://github.com/sholehamed/Shinera-backend/pull/18) (`security/platform-group-role-grants-20261023`)  
+**Status:** Merged security slice at [`dd57b8d3`](https://github.com/sholehamed/Shinera-backend/commit/dd57b8d3400891747821df670ad0f538c0d62f44); Production granular permission enforcement remains OFF  
+**Backend:** [Merged PR #18](https://github.com/sholehamed/Shinera-backend/pull/18) (`security/platform-group-role-grants-20261023`)  
 **Tracking:** [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11), [ADR-003](../architecture/decisions/ADR-003-AUTHORIZATION-AND-PERMISSION-MODEL.md)
 
 ## Purpose and HTTP surface
@@ -34,7 +34,7 @@ Both are protected by the existing live `SystemAdministrator` requirement on the
 
 SQL Server regression test cases include authorized grant, duplicate grant, revoke and duplicate revoke; SuperAdmin role protection and privileged group protection; actor member/self-escalation; cross-tenant group/role, invalid member and inactive group denial; rollback on piggybacked UserRole mutations; and persisted administrator role revocation.
 
-The previous [Build/Unit run 39919612264](https://github.com/sholehamed/Shinera-backend/actions/runs/39919612264) and [SQL Server run 39919612059](https://github.com/sholehamed/Shinera-backend/actions/runs/39919612059) passed on the original PR head. The security review discovered a **two-step administrator self-join escalation**, which has been patched on this branch with a new SQL Server regression. **Final updated PR-head CI must pass before merging; earlier green checks do not verify the fix.**
+The final security review discovered and fixed the **two-step administrator self-join escalation**. The additional SQL Server regression and other checks passed on the final reviewed PR-head `4f15f1335f69e68da1dfb190076bc5185a717eae`: [Build/Unit CI 39920248562](https://github.com/sholehamed/Shinera-backend/actions/runs/39920248562) **success**, [SQL Server authorization CI 39920248548](https://github.com/sholehamed/Shinera-backend/actions/runs/39920248548) **success**. Backend [PR #18](https://github.com/sholehamed/Shinera-backend/pull/18) was squash-merged to main at [`dd57b8d3`](https://github.com/sholehamed/Shinera-backend/commit/dd57b8d3400891747821df670ad0f538c0d62f44). These are feature-branch final-head checks, **not independent post-merge or Production verification**.
 
 ## Deferred security tasks
 
