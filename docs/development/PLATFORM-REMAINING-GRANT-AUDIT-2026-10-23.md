@@ -24,7 +24,7 @@ A `UserGroup` revoke HTTP endpoint is not added in this phase. If an existing gu
 
 ## Verification
 
-SQL Server tests added or strengthened to check correct event counts, actor attribution, duplicate/no-op suppression, permission revocation and re-grant, denied operations, and rollback after a temporary SQL trigger deliberately fails audit INSERTs. Record final-head CI workflow references after they finish; CI green on another head does not verify this change.
+SQL Server tests added or strengthened to check correct event counts, actor attribution, duplicate/no-op suppression, permission revocation and re-grant, denied operations, and rollback after a temporary SQL trigger deliberately fails audit INSERTs. Final backend PR head `e7bf0696be111c27cc008159011a80ff73133589` passed [Build/Unit CI run 39926918483](https://github.com/sholehamed/Shinera-backend/actions/runs/39926918483) and [real SQL Server authorization CI run 39926918475](https://github.com/sholehamed/Shinera-backend/actions/runs/39926918475), including audit INSERT fault-injection rollback tests. These are exact PR-head results, not independent post-merge or Production verification.
 
 ## Known limits
 
