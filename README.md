@@ -11,6 +11,7 @@ Canonical product and engineering documentation for [Shinera](https://github.com
 - [Target-scoped platform grant write boundaries (merged slice; Issue #11 open)](docs/development/PLATFORM-GRANT-BOUNDARIES-2026-10-23.md)
 - [Direct System Role grant/revoke (merged slice; Issue #11 open)](docs/development/PLATFORM-DIRECT-ROLE-GRANTS-2026-10-23.md)
 - [Platform GroupRole grant/revoke (merged slice; Issue #11 open)](docs/development/PLATFORM-GROUP-ROLE-GRANTS-2026-10-23.md)
+- [System UserPermission allow/deny/clear (Draft; Issue #11 open)](docs/development/PLATFORM-USER-PERMISSION-OVERRIDES-2026-10-23.md)
 - [Staged System Permission Catalog (Draft)](docs/development/PLATFORM-PERMISSION-CATALOG-2026-10-23.md)
 - [Permission Catalog engineering log](docs/development/ENGINEERING-LOG-PLATFORM-PERMISSIONS-2026-10-23.md)
 - [System Role write authorization (merged foundation; Issue #11 follow-ups)](docs/development/PLATFORM-ROLE-WRITES-2026-10-23.md)
