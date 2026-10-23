@@ -13,7 +13,15 @@ Extends the merged SQL append-only `PlatformGrantAuditEntries` ledger to the two
 
 **Role permissions (RolePermission):** `Roles/{roleId}/permissions` requires a verified System administrator and Master role, prohibits edits to the SUPERADMIN role, and compares persisted permission assignments before/after the legacy replacement command. Each effective addition or removal produces a grant/revoke audit event within the **same Serializable transaction**. Replacements with an unchanged permission set do not produce change events, even though the legacy command may rewrite rows.
 
-Both paths execute inside EF Core's SQL Server retry execution strategy, with live authorization checks **inside** the transaction rather than before it. The stored actor and exact group/role, member/permission, event type, and old/new assignment states support later authorized audit views.
+Both paths execute inside EF Core's SQL Server retry execution strategy, with live authorization checks **inside** the transaction rather than before it.
+
+### Final-review security hardening
+
+The membership executor snapshots **all** current members of the target group before and after the legacy handler. If the delta includes a non-requested membership, an unrequested deletion, or misses any expected validated addition, it fails closed and rolls the transaction back. This blocks unrelated pre-tracked changes to the *same* group that previously matched the broad group grant intent.
+
+The role-permission endpoint passes its exact requested permission IDs to the transactional writer. After the command saves its assignment changes, the writer verifies that the persisted set matches that reviewed list exactly. A same-role, pre-tracked permission cannot silently piggyback into the committed state. Failures roll back the replacement and all audit entries.
+
+Real SQL Server regressions explicitly stage these same-target piggyback mutations and verify no unauthorized data or audit entry persists. The stored actor and exact group/role, member/permission, event type, and old/new assignment states support later authorized audit views.
 
 ## Verification and deployment boundary
 
