@@ -1,0 +1,37 @@
+# Platform Permission CRUD — real HTTP matrix and expected failure mapping
+
+**Date:** 2026-10-23  
+**Tracking:** [Backend P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
+**Backend:** [Draft PR #26](https://github.com/sholehamed/Shinera-backend/pull/26)  
+**Status:** In progress; latest PR-head CI and final security review pending
+
+## Problem seen in the current code
+
+The existing System Permission endpoints enforce live SystemAdministrator access and support optional Resource.Action permissions, but several expected CRUD errors did not have explicit HTTP contracts. A missing Permission read threw a generic `Exception("not found")`; create validation was empty; and the CQRS `IDispatcher` used by these endpoints does not automatically execute the nested FluentValidation validators. Missing Resource/linked-resource IDs could thus emerge as database exceptions rather than an intentional client error.
+
+## Scoped fix
+
+The Permission write executor checks current persisted administrator authorization within the existing fixed Master write gateway before inspecting request state. It now distinguishes malformed code/name/resource/link input (400), missing target IDs (404), code conflicts and recognized SQL FK/unique conflicts (409), while preserving reserved deployment-managed permission catalog 403. Unexpected exceptions remain visible as failures rather than silently rewritten.
+
+It does not enable Production Resource.Action enforcement, migrate any Master grants, broaden tenant visibility or add API bypasses. A Development + E2E flag is required for the isolated Resource fixture; normal deployments do not receive it.
+
+## Live OpenIddict HTTP acceptance matrix
+
+| Operation | Expected HTTP |
+| --- | --- |
+| Anonymous Permission GET/POST | 401 |
+| Ordinary System or Tenant caller | 403 |
+| Reserved ROLES/PERMISSIONS catalog create/edit/delete/state | 403 |
+| Valid scoped Create / persisted GET / Update / ChangeState / Delete | 201 / 200 / 204 / 204 / 204 |
+| GET/PUT/DELETE/PATCH unknown Permission | 404 |
+| Missing/unknown Resource, empty Code or Name, invalid API/UI links | 400 |
+| Duplicate Permission Code (normalized) | 409 |
+| GET deleted Permission | 404 |
+
+The tests make actual signed OpenIddict HTTP requests to the .NET API with a disposable SQL Server. Permission state is read back through the public endpoint after successful writes.
+
+## Remaining acceptance work
+
+This slice focuses on Permission CRUD error contracts and does not close Issue #11. Remaining: durable denied-attempt audit, reviewed concurrency/deadlock and transactional fault injection, safe Production Master grant inventory/bootstrap/backfill/cutover/rollback, and final ADR-003 acceptance review.
+
+**Evidence:** Pending completion of latest backend Draft PR #26 CI. Do not claim merge, Production validation, or universal status mapping outside the explicit covered endpoints.
