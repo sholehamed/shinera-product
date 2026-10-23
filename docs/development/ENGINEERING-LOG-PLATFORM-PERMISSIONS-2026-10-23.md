@@ -17,3 +17,5 @@ Follow-up: complete catalog-controlled Permission CRUD and durable audit, prepar
 - [Backend PR #13](https://github.com/sholehamed/Shinera-backend/pull/13) **squash merged** at [`c05bda50`](https://github.com/sholehamed/Shinera-backend/commit/c05bda503a785f20a015c1e1aaa4c7df53e8ddf2).
 - Production operator guardrail: do not enable granular Role endpoint policy as a complete least-privilege security boundary until Permission CRUD and other grant mutation paths are protected and tested. Development opt-in bootstrap may restore revoked grants on restart while enabled, so is for disposable environments only.
 - Issues [#11](https://github.com/sholehamed/Shinera-backend/issues/11) and [#9](https://github.com/sholehamed/Shinera-backend/issues/9) stay open. The backend PR-head SQL Server result is not a new post-merge SQL Server execution.
+
+- Post-merge backend `main` [CI run 39908025302](https://github.com/sholehamed/Shinera-backend/actions/runs/39908025302) also **succeeded** for squash commit `c05bda50`. The 14/14 real SQL Server integration pass remains final PR-head evidence; there was no separate main-push SQL Server workflow.
