@@ -1,9 +1,9 @@
 # Production Master authorization cutover — P0 Issue #11
 
 **Date:** 2026-10-24  
-**Backend:** [Draft PR #29](https://github.com/sholehamed/Shinera-backend/pull/29)  
+**Backend:** [PR #29](https://github.com/sholehamed/Shinera-backend/pull/29) · [squash commit `1e206094`](https://github.com/sholehamed/Shinera-backend/commit/1e206094e097c17459c1881f0850d376595a0de1)  
 **Tracking:** [P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
-**Status:** Phase 5A read-only Inventory implemented and CI-verified; Draft, not merged. NOT Production backfill or cutover approval.
+**Status:** Phase 5A read-only Inventory reviewed and merged. NOT Production backfill or cutover approval.
 
 ## Scope and invariants
 
@@ -41,6 +41,6 @@ Real disposable SQL Server regressions cover missing grants, complete approved-s
 - No authenticated HTTP interface is added for bypassing Master security. Readiness reports must not leak secrets or raw identity details.
 - Production audit retention, denial volume, long-running locks and final ADR-003 security acceptance remain open.
 
-**Verified final backend PR head `b22ba01899bd8effc261b1e11cc82d3cbc9b258b`:** [Build/Unit CI 40025875171](https://github.com/sholehamed/Shinera-backend/actions/runs/40025875171) PASS; [real SQL Server + signed OpenIddict HTTP CI 40025875285](https://github.com/sholehamed/Shinera-backend/actions/runs/40025875285) PASS — **27/27 SQL Server tests, 89/89 HTTP checks**, including two new persisted read-only inventory regressions. These are CI tests using disposable SQL Server, **not** an inventory of a real Production installation.
+**Verified final backend PR head `11484663e4e0d41bac0f70881200822cd9bbdfbe`:** [Build/Unit CI 40027251550](https://github.com/sholehamed/Shinera-backend/actions/runs/40027251550) PASS; [real SQL Server + signed OpenIddict HTTP CI 40027251639](https://github.com/sholehamed/Shinera-backend/actions/runs/40027251639) PASS — **28/28 SQL Server tests, 89/89 HTTP checks**, including three read-only inventory regressions. The final-review fix added explicit blocking checks for Master RolePermission, GroupRole, UserGroup and UserPermission cross-Tenant relationships. These are CI tests using disposable SQL Server, **not** an inventory of a real Production installation.
 
-**Backend and product PRs stay Draft. Issue #11 remains OPEN. Production granular enforcement remains OFF.**
+**Backend PR #29 was squash-merged** at [`1e206094`](https://github.com/sholehamed/Shinera-backend/commit/1e206094e097c17459c1881f0850d376595a0de1). The CI evidence is from the final **PR head**, not post-merge SQL/HTTP or a Production installation. **Issue #11 remains OPEN** for approved backfill, cutover, rollback and final ADR-003 review. Production granular enforcement remains OFF.
