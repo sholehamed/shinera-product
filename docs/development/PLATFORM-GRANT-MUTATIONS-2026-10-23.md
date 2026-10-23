@@ -1,7 +1,7 @@
 # Shinera — Platform Role/Group grant mutation hardening
 
 **Date:** 2026-10-23  
-**Status:** In progress, Draft — not merged or enabled in Production  
+**Status:** Backend security slice merged at [`378d6cac`](https://github.com/sholehamed/Shinera-backend/commit/378d6cac11288ef0b6b832cd94a1de53bb1edcd2); granular Production permission enforcement remains OFF  
 **Backend:** [PR #15](https://github.com/sholehamed/Shinera-backend/pull/15) (`security/platform-grant-mutation-hardening-20261023`)  
 **Tracking:** [P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11), [ADR-003](../architecture/decisions/ADR-003-AUTHORIZATION-AND-PERMISSION-MODEL.md)
 
@@ -9,7 +9,7 @@
 
 The existing live SystemAdministrator check depends on an active master-scoped role whose normalized name is `SUPERADMIN`. Creating, renaming, deleting or deactivating this role through generic Role CRUD can forge or disable privileged authorization. Separately, the legacy Group member command accepted arbitrary IDs with no master/UserType validation and no tenant storage assignment. Existing tenant write interception prevents unscoped writes but is not an adequate resource-level grant policy.
 
-## Backend changes under review
+## Merged backend changes
 
 1. Platform Role writes now query the **live master role definition** inside the bounded `AuthorizedPlatformMasterWrite` scope. Generic Role create/update cannot assign the reserved `SUPERADMIN` name. Generic CRUD/state/permission replacement cannot modify the existing role with this privileged name.
 2. New `PlatformGroupMembershipWriteExecutor` uses the existing live account/master-role authorization scope and verifies group membership inputs against SQL Server before dispatch. It accepts only active master-scoped groups and active System users with `User.TenantId == null`. A group already linked to a `SUPERADMIN` role cannot gain members through ordinary CRUD.
@@ -18,10 +18,10 @@ The existing live SystemAdministrator check depends on an active master-scoped r
 
 ## Verification
 
-- [Backend PR #15](https://github.com/sholehamed/Shinera-backend/pull/15) remains **Draft**.
-- [Build/xUnit workflow](https://github.com/sholehamed/Shinera-backend/actions/runs/39912421977): check actual latest-head result before merge.
-- [SQL Server authorization workflow](https://github.com/sholehamed/Shinera-backend/actions/runs/39912421998): check actual latest-head result before merge.
-- These workflows run on the **feature branch**, not on merged `main`. Do not claim final release verification.
+- [Backend PR #15](https://github.com/sholehamed/Shinera-backend/pull/15) **merged** via squash at [`378d6cac`](https://github.com/sholehamed/Shinera-backend/commit/378d6cac11288ef0b6b832cd94a1de53bb1edcd2). Final reviewed PR head: `0bc84456cfa242085d464a2e8956734ae0a3df5b`.
+- [Build/xUnit workflow](https://github.com/sholehamed/Shinera-backend/actions/runs/39912421977): **passed** on final reviewed PR head.
+- [SQL Server authorization workflow](https://github.com/sholehamed/Shinera-backend/actions/runs/39912421998): **passed** on final reviewed PR head.
+- These workflows verified the **final PR head**, not an independent post-merge SQL Server execution on `main`. No full Production readiness is claimed.
 
 ## Known limitations and remaining P0 scope
 
