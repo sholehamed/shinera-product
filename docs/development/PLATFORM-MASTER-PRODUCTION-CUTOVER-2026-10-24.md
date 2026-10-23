@@ -17,13 +17,13 @@ This is a narrow implementation slice of ADR-003's **separate platform context, 
 
 ## Stage 5A — Inventory (implemented in Backend PR #29)
 
-`PlatformProductionGrantInventory.ReadAsync` returns a **read-only** snapshot. It checks the fixed Master Tenant's activity, exactly one active Master SuperAdmin role, at least one *active* live System subject with a Master-scoped role assignment, System users incorrectly holding Tenant IDs, cross-scope Master UserRole links, direct user-level deny overrides, missing/deactivated/duplicate platform codes and missing Master SuperAdmin RolePermission grants.
+`PlatformProductionGrantInventory.ReadAsync` returns a **read-only** snapshot. It checks the fixed Master Tenant's activity, exactly one active Master SuperAdmin role, at least one *active* live System subject with a Master-scoped role assignment, System users incorrectly holding Tenant IDs, cross-scope Master UserRole, RolePermission, GroupRole, UserGroup and UserPermission relationships, direct user-level deny overrides, missing/deactivated/duplicate platform codes and missing Master SuperAdmin RolePermission grants. Each invalid Master relationship is an explicit blocking counter, even when SQL foreign keys are satisfied.
 
 A failed gate reports `HasBlockingFindings=true`; a passing gate **only means these selected blockers were not detected**, not that rollout is approved or every possible authorization path was assessed.
 
 The separate **read-only** `scripts/sql/platform-master-production-inventory.sql` requires an explicitly supplied fixed Master GUID and prints scoped IDs and grant rows for internal operator review. Do not share these results publicly. It must be checked against the actual deployed catalog revision and target DB. No read-only inventory operation creates a role, user, membership or permission grant.
 
-Real disposable SQL Server regressions cover missing grants, complete approved-scope grants, revoked grants, wrongly bound System accounts, Tenant subjects with Master role assignments, direct deny overrides, and no mutation by inventory calls.
+Real disposable SQL Server regressions cover missing grants, complete approved-scope grants, revoked grants, wrongly bound System accounts, Tenant subjects with Master role assignments, direct deny overrides, all four additional cross-scope Master relationship types, and no mutation by inventory calls.
 
 ## Staged Production execution plan — NOT YET AUTOMATED
 
