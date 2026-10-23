@@ -1,7 +1,7 @@
 # Platform Authorization — real HTTP E2E and SQL Server verification
 
 **Date:** 2026-10-23  
-**Status:** Draft / CI pending — [Backend PR #24](https://github.com/sholehamed/Shinera-backend/pull/24)  
+**Status:** Draft PR; final-head CI passed — [Backend PR #24](https://github.com/sholehamed/Shinera-backend/pull/24)  
 **Tracking:** [Identity P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
 **Backend branch:** `security/platform-authorization-http-e2e-20261023`
 
@@ -36,7 +36,7 @@ The API's results are asserted **exactly**, including persisted Role data return
 
 Follow-up HTTP coverage also validates `Roles/lookup` against the fixed Master role-assignment scope, rejects modifications to the reserved SUPERADMIN Role and reserved permission keys, and exercises Role deletion after cleanup. A later HTTP pass uncovered an unexpected GroupRole revoke 403 after normal GroupMember cleanup. The structured HTTP denial log identified `TenantSaveChangesInterceptor` rejecting a **Modified** GroupRole grant. The root cause was `GroupRole : FullAuditableEntity`: `AuditableEntityInterceptor` silently transformed the deletion into a soft-delete modification before the strict grant-write guard ran. It also risked leaving the GroupRole effective and blocking later re-grants behind its unique index.
 
-Backend PR #24 addresses this using a narrow `IHardDeleteAssignment` marker on `GroupRole`. The shared audit interceptor now preserves actual `EntityState.Deleted` for only these authorization-link entities; **all other soft-deletable entities retain existing behavior**. `TenantSaveChangesInterceptor` continues to authorize the exact group+role pair, and the existing SQL `PlatformGrantAuditEntries` records the committed revoke. The HTTP suite explicitly tests delete, idempotent delete, re-grant, and delete again to prevent regression. This does not change the database schema or weaken isolation. CI on the updated head remains the final gate. The earlier real SQL Server xUnit suite continues to verify audit-row counts, actor identity, rollback when Audit INSERT fails, and denial of unrelated tracked grant mutations.
+Backend PR #24 addresses this using a narrow `IHardDeleteAssignment` marker on `GroupRole`. The shared audit interceptor now preserves actual `EntityState.Deleted` for only these authorization-link entities; **all other soft-deletable entities retain existing behavior**. `TenantSaveChangesInterceptor` continues to authorize the exact group+role pair, and the existing SQL `PlatformGrantAuditEntries` records the committed revoke. The HTTP suite explicitly tests delete, idempotent delete, re-grant, and delete again to prevent regression. This does not change the database schema or weaken isolation. CI on the updated head has now passed. The earlier real SQL Server xUnit suite continues to verify audit-row counts, actor identity, rollback when Audit INSERT fails, and denial of unrelated tracked grant mutations.
 
 ## Disposable test-only setup
 
@@ -55,4 +55,6 @@ This step does **not** finish Issue #11. The original acceptance criteria also r
 
 Additional hardening under separate review: tamper-evident off-database Audit sealing (SQL DDL-capable actors can remove the append-only trigger), authorized history viewing and retention. A passed CI is not independent post-merge or Production verification.
 
-**Gate:** Review the final backend PR head's Build/Unit and SQL Server + HTTP workflow results. Keep both PRs Draft and [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11) OPEN until each is independently approved.
+**Verified PR-head evidence:** backend commit `c235c776a5d7a72a388c8ac3934106905cf555ff` passed [Build/Unit CI 39940613530](https://github.com/sholehamed/Shinera-backend/actions/runs/39940613530) and [SQL Server + real HTTP CI 39940613458](https://github.com/sholehamed/Shinera-backend/actions/runs/39940613458). The latter ran **20 real SQL Server regression tests** and **50 real OpenIddict HTTP assertions**, including Grant → Revoke → Re-Grant → Revoke of GroupRole and protected SuperAdmin/catalog boundaries. These are final feature-branch CI results, not independent post-merge or Production evidence.
+
+**Gate:** Keep both PRs Draft and [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11) OPEN pending explicit final review. Production granular authorization remains OFF.
