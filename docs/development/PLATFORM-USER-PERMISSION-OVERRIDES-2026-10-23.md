@@ -1,7 +1,7 @@
 # Shinera — System UserPermission override administration
 
 **Date:** 2026-10-23  
-**Status:** In progress / Backend [Draft PR #19](https://github.com/sholehamed/Shinera-backend/pull/19)  
+**Status:** Merged backend security slice [PR #19](https://github.com/sholehamed/Shinera-backend/pull/19) at [`472f72da`](https://github.com/sholehamed/Shinera-backend/commit/472f72da4d86aeacb4c427e41a4937e34280aeff); Production granular enforcement remains OFF  
 **Branch:** `security/platform-user-permission-grants-20261023`  
 **Tracking:** [Identity P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11), [ADR-003](../architecture/decisions/ADR-003-AUTHORIZATION-AND-PERMISSION-MODEL.md)
 
@@ -45,7 +45,7 @@ This permission check is **additional to** the coarse `SystemAdministrator` role
 
 New real SQL Server test covers inherited authorization through both Role and Group, Deny precedence, Allow restoration, removal restoring inherited behavior, idempotency, no inherited Export/explicit Allow, self, tenant, SuperAdmin, reserved catalog refusal, piggybacked grant rollback, and revoked administrator grant refusal.
 
-[Backend Build/Unit run 39921680594](https://github.com/sholehamed/Shinera-backend/actions/runs/39921680594) **passed** and [SQL Server authorization run 39921680707](https://github.com/sholehamed/Shinera-backend/actions/runs/39921680707) **passed** on exact backend PR head `e71a1a19b9538cd5dcbc0a415c6df3e1eeeecb36`. These are feature-branch checks, not Production or post-merge verification. Final security review and Merge remain separate.
+[Backend Build/Unit run 39921680594](https://github.com/sholehamed/Shinera-backend/actions/runs/39921680594) **passed** and [SQL Server authorization run 39921680707](https://github.com/sholehamed/Shinera-backend/actions/runs/39921680707) **passed** on exact backend PR head `e71a1a19b9538cd5dcbc0a415c6df3e1eeeecb36`. These are final reviewed feature-branch checks, not independent post-merge SQL Server or Production verification. Backend PR #19 was squash-merged to main at [`472f72da`](https://github.com/sholehamed/Shinera-backend/commit/472f72da4d86aeacb4c427e41a4937e34280aeff).
 
 ## Deferred P0 requirements
 
