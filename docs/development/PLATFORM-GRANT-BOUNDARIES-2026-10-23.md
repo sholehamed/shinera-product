@@ -23,8 +23,8 @@ A writable Master TenantId is **not itself** permission to change every grant or
 
 New SQL Server regression verifies that a general trusted master scope cannot create direct platform role/group/user permission grants or unscoped role/group links, and that authorized role/group operations reject cross-target grant smuggling. Existing positive RolePermission and UserGroup tests provide regression coverage for supported operations.
 
-- [Build/xUnit](https://github.com/sholehamed/Shinera-backend/actions/runs/39914356700): pending final status verification.
-- [Real SQL Server authorization](https://github.com/sholehamed/Shinera-backend/actions/runs/39914356804): pending final status verification.
+- [Build/xUnit](https://github.com/sholehamed/Shinera-backend/actions/runs/39914356700): **passed** on backend PR-head `c248dad0b1c291b766fd493eab24edf7c5f59283`.
+- [Real SQL Server authorization](https://github.com/sholehamed/Shinera-backend/actions/runs/39914356804): **passed** on the same PR head.
 - Do not claim post-merge verification or Production rollout from PR-head CI alone.
 
 ## Explicit remaining P0 work
