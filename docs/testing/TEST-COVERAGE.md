@@ -84,6 +84,8 @@ This latest baseline supersedes the older table above for current counts and cov
 
 ## In progress — System Permission CRUD (2026-10-23)
 
-- [Backend PR #14](https://github.com/sholehamed/Shinera-backend/pull/14) adds SQL Server regression verifying denied edits to platform permission catalog keys, bounded scope disposal and live System role-revocation rejection; CI result pending.
+- [Backend PR #14](https://github.com/sholehamed/Shinera-backend/pull/14) adds SQL Server regression verifying denied edits to platform permission catalog keys, bounded scope disposal and live System role-revocation rejection; [Backend CI 39909529052](https://github.com/sholehamed/Shinera-backend/actions/runs/39909529052) **21/21 passed**; [SQL Server CI 39909529059](https://github.com/sholehamed/Shinera-backend/actions/runs/39909529059) **15/15 passed** on final PR head.
 - HTTP smoke adds anonymous Permission POST 401 and authenticated reserved catalog mutation POST 403, with opt-in Permission endpoint policy enabled only for the disposable Development SQL Server process.
 - No claim of all Permission positive CRUD HTTP coverage, complete arbitrary grant-mutation review, Production grant migration, transactional revocation, audit tamper resistance or final merge.
+
+- The CI script also executes real HTTP reserved Permission mutation (403) and anonymous Permission POST (401); both completed successfully after Bash escaping fix. No post-merge run exists because PR remains Draft.

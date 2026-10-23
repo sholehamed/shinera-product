@@ -31,7 +31,13 @@ Previously merged PR #13 established an additive System Role/Permission catalog 
 
 | Gate | State |
 |---|---|
-| Backend Build/xUnit | CI pending |
-| SQL Server integration migrations | CI pending |
-| Real HTTP Permission 401/403 | CI pending |
+| Backend Build/xUnit | **21/21 passed**, Release Build — [CI 39909529052](https://github.com/sholehamed/Shinera-backend/actions/runs/39909529052) |
+| SQL Server integration migrations | **15/15 passed**, real SQL Server — [CI 39909529059](https://github.com/sholehamed/Shinera-backend/actions/runs/39909529059) |
+| Real HTTP Permission 401/403 | **Passed**: real login, role smoke, reserved Permission POST 403, anonymous Permission POST 401 — [CI 39909529059](https://github.com/sholehamed/Shinera-backend/actions/runs/39909529059) |
 | PR merge | Not performed |
+
+## Verified PR-head and CI fix — 2026-10-23
+
+- Backend PR #14 latest head: `1dca409efef346d8e3799c28b49602c46129889d`. [Backend CI 39909529052](https://github.com/sholehamed/Shinera-backend/actions/runs/39909529052) passed 21/21 xUnit and Release Build. [Real SQL Server CI 39909529059](https://github.com/sholehamed/Shinera-backend/actions/runs/39909529059) passed 15/15 isolated migration/integration tests and actual API smoke including Permission POST 401/403.
+- An intermediate SQL Server workflow failed with exit 127 from erroneously doubled Bash `curl` line-continuation backslashes; no SQL Server test failed. The workflow was fixed and the new PR head passed both checks. Intermediate failing workflow is not final evidence.
+- Current change remains a **non-merged, default-off** Permission CRUD authorization hardening slice. Not every positive HTTP CRUD, grant mutation or race/revocation test is covered; durable audit and Production grants remain open.
