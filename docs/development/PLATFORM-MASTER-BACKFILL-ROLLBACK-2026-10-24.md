@@ -40,6 +40,7 @@ A separate production-only offline operator tool, fully reviewed two-person appr
 - A fabricated rollback pointing at a manually inserted row with matching actor/ID/permission, but no prior grant-audit record, is rejected without deleting the row.
 - Unexpected unrelated RolePermission between approval and execution blocks apply with zero new writes.
 - Simulated SQL audit insert failure causes the grant insert to roll back atomically; an explicit later replay is possible.
+- With two grants in one batch, a failure on the **second audit insert** must undo both RolePermission rows and the first audit insert (verified in a separate SQL regression).
 - A wrong target database name and revoked independent reviewer both fail without a new RolePermission or audit row.
 - Existing SQL and OpenIddict real HTTP suite must remain green; no endpoint or authorization flag changes.
 
