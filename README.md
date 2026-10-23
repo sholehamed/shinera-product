@@ -8,6 +8,7 @@ Canonical product and engineering documentation for [Shinera](https://github.com
 - [Current development status](docs/development/DEVELOPMENT-STATUS.md)
 - [System Permission CRUD hardening (merged slice; Issue #11 open)](docs/development/PLATFORM-PERMISSION-CRUD-2026-10-23.md)
 - [Platform Role/Group grant mutation hardening (merged slice; Issue #11 remains open)](docs/development/PLATFORM-GRANT-MUTATIONS-2026-10-23.md)
+- [Target-scoped platform grant write boundaries (merged slice; Issue #11 open)](docs/development/PLATFORM-GRANT-BOUNDARIES-2026-10-23.md)
 - [Staged System Permission Catalog (Draft)](docs/development/PLATFORM-PERMISSION-CATALOG-2026-10-23.md)
 - [Permission Catalog engineering log](docs/development/ENGINEERING-LOG-PLATFORM-PERMISSIONS-2026-10-23.md)
 - [System Role write authorization (merged foundation; Issue #11 follow-ups)](docs/development/PLATFORM-ROLE-WRITES-2026-10-23.md)
