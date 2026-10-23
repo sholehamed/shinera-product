@@ -15,6 +15,7 @@ Canonical product and engineering documentation for [Shinera](https://github.com
 - [Transactional SQL grant audit (merged slice; Issue #11 open)](docs/development/PLATFORM-GRANT-TRANSACTIONAL-AUDIT-2026-10-23.md)
 - [Transactional grant audit for GroupMembers and RolePermissions (merged slice; Issue #11 open)](docs/development/PLATFORM-GRANT-AUDIT-COVERAGE-2026-10-23.md)
 - [Audited System GroupMembers revoke (merged slice; Issue #11 open)](docs/development/PLATFORM-GROUP-MEMBER-REMOVAL-AUDIT-2026-10-23.md)
+- [Real OpenIddict HTTP authorization E2E (merged slice; Issue #11 open)](docs/development/PLATFORM-AUTHORIZATION-HTTP-E2E-2026-10-23.md)
 - [Staged System Permission Catalog (Draft)](docs/development/PLATFORM-PERMISSION-CATALOG-2026-10-23.md)
 - [Permission Catalog engineering log](docs/development/ENGINEERING-LOG-PLATFORM-PERMISSIONS-2026-10-23.md)
 - [System Role write authorization (merged foundation; Issue #11 follow-ups)](docs/development/PLATFORM-ROLE-WRITES-2026-10-23.md)
