@@ -73,8 +73,10 @@ This latest baseline supersedes the older table above for current counts and cov
 - [Backend PR #12](https://github.com/sholehamed/Shinera-backend/pull/12) merged at [`3c3e2fce`](https://github.com/sholehamed/Shinera-backend/commit/3c3e2fce55b2c92dcfe10221ce1158a174c43dc2); these counts are final PR-head checks (not independent post-merge SQL Server runs). No production permission catalog migration or durable audit is implemented.
 
 
-## In progress — Platform Permission Catalog and opt-in Role enforcement
+## Merged baseline — Platform Permission Catalog and opt-in Role enforcement
 
 - [Backend PR #13](https://github.com/sholehamed/Shinera-backend/pull/13): SQL Server integration test for catalog idempotence, no implicit grant, explicit Development grant, revoked grant persistence, and inactive permission preservation.
 - Real Development app smoke opts into granular Role policy with deliberate disposable test bootstrap; existing Role POST and foreign-scope 403 are checked.
 - **Latest PR-head checks passed:** [Backend CI 39872147609](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147609) **21/21** and [SQL Server CI 39872147628](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147628) **14/14**, plus API smoke. Production migration, complete granular System/Permission CRUD, HTTP permission revocation and SQL bulk/raw write isolation have not been validated.
+
+- [Backend PR #13](https://github.com/sholehamed/Shinera-backend/pull/13) **merged** at [`c05bda50`](https://github.com/sholehamed/Shinera-backend/commit/c05bda503a785f20a015c1e1aaa4c7df53e8ddf2). Final CI counts above refer to PR-head runs, not a separate post-merge SQL Server test run. Full Production rollout and permission-grant revocation HTTP testing remain open.
