@@ -1,0 +1,44 @@
+# P0 Stage 5B — Explicit Master grant backfill and exact rollback
+
+**Status:** Draft implementation slice, NOT a Production deployment approval  
+**Backend:** [Stage 5B branch](https://github.com/sholehamed/Shinera-backend/tree/security/platform-master-approved-backfill-rollback-20261024)  
+**Tracking:** [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
+**Prior gate:** [Stage 5A reviewed inventory](PLATFORM-MASTER-PRODUCTION-CUTOVER-2026-10-24.md)
+
+## Scope of this slice
+
+The backend now contains a stand-alone **offline-only** `PlatformMasterGrantBackfill` primitive. It is NOT registered as a service or endpoint, is not called by seeding or startup, and has **no Production execution path** in this slice. An independently authenticated operator, approval-signature verification, deployment orchestrator and recovery process have **not** been implemented. There is no implicit permission grant to all existing System administrators.
+
+The primitive deliberately supports only **explicit RolePermission additions** to one already-existing, live, fixed-Master `SUPERADMIN` role. It does **not** create roles, System accounts, UserRoles, GroupRoles or direct UserPermissions; it never sets `User.TenantId`. This is a constrained first part of Production grant backfill, not complete general-purpose permission migration.
+
+## Reviewed manifest
+
+The input `Manifest` requires:
+
+- Exactly the fixed Master Tenant ID, the target Master SuperAdmin Role ID, and the actual target database name
+- Distinct actor and reviewer System user IDs, both currently active, unlocked and **already assigned** the live Master SuperAdmin role
+- The **complete exact before-image** of that Role's grants, including every pre-existing `RolePermission.Id` and `PermissionId`
+- At most nine precisely identified, nonempty additions, with **preapproved new RolePermission IDs** and existing active platform-catalog Permission IDs; no duplicated target/assignment IDs
+
+The executor uses a SQL Server `Serializable` transaction, role-specific `sp_getapplock`, live Master/User/Role/Permission validation, strict before-image comparison and parameterized SQL. **Any mismatch fails closed**, rather than computing a new privilege proposal from the current database. On each grant it writes the RolePermission and an entry in existing append-only `PlatformGrantAuditEntries` **inside the same transaction**.
+
+Rollback accepts the exact same manifest, requires the entire expected after-image to match, and removes **only those exact new Row IDs** if they still match role, permission and `CreatedBy`. It appends compensating `revoke` audit rows in the same transaction. It cannot delete an unrelated pre-existing grant. A repeat apply/rollback fails closed; there is no force-overwrite option.
+
+## Limitations and controls not to skip
+
+The existing grant audit schema has no immutable `BatchId`, signer identity, approval hash or `RolePermissionId` link. A row's matching `Id`, `PermissionId` and `CreatedBy` therefore provides **operational targeting**, not a tamper-proof proof of batch provenance. Immutable separately held manifest/receipts, signature verification, database access controls and reconciliation must be implemented and reviewed before deploying this primitive.
+
+A separate production-only offline operator tool, fully reviewed two-person approval process, secure batch artifact storage, resuming/reconciling ambiguous DB timeouts, permission catalog migration readiness, effective-grant evaluation and manual disaster recovery exercises remain **P0 acceptance gates**. SQL application locks coordinate only cooperating writers; the serializable snapshot protects this transaction but is not a replacement for maintenance-window/change freeze controls. Database Admin and DDL principals can alter audit triggers.
+
+**No Production release authorization is implied by merging the code.** Granular enforcement and the `AllowCodeUniquenessMigration` flag remain OFF unless separately approved.
+
+## SQL Server regression plan
+
+- Exact approved single-grant addition adds one RolePermission row and one append-only audit event.
+- Reapplying the identical manifest fails because before-image has changed; the existing unrelated grant remains untouched.
+- Exact rollback removes only the new Row ID and appends one `revoke` audit entry. Second rollback is denied.
+- Unexpected unrelated RolePermission between approval and execution blocks apply with zero new writes.
+- Simulated SQL audit insert failure causes the grant insert to roll back atomically; an explicit later replay is possible.
+- Existing SQL and OpenIddict real HTTP suite must remain green; no endpoint or authorization flag changes.
+
+**Next:** finalize fail-closed review and CI, then add an operator-signed batch receipt/ledger, independently verified approval, exact row attribution, recovery orchestration and Production rollout rehearsals before Stage 5C cutover/ADR-003 acceptance.
