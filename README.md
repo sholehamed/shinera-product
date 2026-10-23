@@ -6,6 +6,8 @@ Canonical product and engineering documentation for [Shinera](https://github.com
 - [Product backlog](docs/product/SHINERA-PRODUCT-BACKLOG.md)
 - [Architecture and ADRs](docs/architecture/ARCHITECTURE-OVERVIEW.md)
 - [Current development status](docs/development/DEVELOPMENT-STATUS.md)
+- [Staged System Permission Catalog (Draft)](docs/development/PLATFORM-PERMISSION-CATALOG-2026-10-23.md)
+- [Permission Catalog engineering log](docs/development/ENGINEERING-LOG-PLATFORM-PERMISSIONS-2026-10-23.md)
 - [System Role write authorization (merged foundation; Issue #11 follow-ups)](docs/development/PLATFORM-ROLE-WRITES-2026-10-23.md)
 - [Role write engineering log](docs/development/ENGINEERING-LOG-PLATFORM-ROLE-WRITES-2026-10-23.md)
 - [Tenant write isolation: reviewed merge and remaining risks](docs/development/TENANT-WRITE-ISOLATION-2026-10-23.md)
