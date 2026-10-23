@@ -3,7 +3,7 @@
 **Date:** 2026-10-24  
 **Backend:** [Draft PR #29](https://github.com/sholehamed/Shinera-backend/pull/29)  
 **Tracking:** [P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
-**Status:** Phase 5 started; read-only Inventory slice. NOT a Production backfill or cutover approval.
+**Status:** Phase 5A read-only Inventory implemented and CI-verified; Draft, not merged. NOT Production backfill or cutover approval.
 
 ## Scope and invariants
 
@@ -40,5 +40,7 @@ Real disposable SQL Server regressions cover missing grants, complete approved-s
 - Production backfill executor, exact reversible batch manifest, immutable grant-audit linking, partial failure/fault injection, multi-node concurrency, backup/restore and rollback rehearsal remain to implement and test.
 - No authenticated HTTP interface is added for bypassing Master security. Readiness reports must not leak secrets or raw identity details.
 - Production audit retention, denial volume, long-running locks and final ADR-003 security acceptance remain open.
+
+**Verified final backend PR head `b22ba01899bd8effc261b1e11cc82d3cbc9b258b`:** [Build/Unit CI 40025875171](https://github.com/sholehamed/Shinera-backend/actions/runs/40025875171) PASS; [real SQL Server + signed OpenIddict HTTP CI 40025875285](https://github.com/sholehamed/Shinera-backend/actions/runs/40025875285) PASS — **27/27 SQL Server tests, 89/89 HTTP checks**, including two new persisted read-only inventory regressions. These are CI tests using disposable SQL Server, **not** an inventory of a real Production installation.
 
 **Backend and product PRs stay Draft. Issue #11 remains OPEN. Production granular enforcement remains OFF.**
