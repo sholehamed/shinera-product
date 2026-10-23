@@ -1,9 +1,9 @@
 # Platform Authorization — real HTTP E2E and SQL Server verification
 
 **Date:** 2026-10-23  
-**Status:** Draft PR; final-head CI passed — [Backend PR #24](https://github.com/sholehamed/Shinera-backend/pull/24)  
+**Status:** Backend PR #24 merged to `main` after final review; final PR-head CI passed — [Backend PR #24](https://github.com/sholehamed/Shinera-backend/pull/24)  
 **Tracking:** [Identity P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
-**Backend branch:** `security/platform-authorization-http-e2e-20261023`
+**Merged backend commit:** [`c4c7b94a`](https://github.com/sholehamed/Shinera-backend/commit/c4c7b94a418a9f87bb816c1de17b977a84b6bf7b) (squash merge from `security/platform-authorization-http-e2e-20261023`)
 
 ## Purpose
 
@@ -32,7 +32,7 @@ Close the HTTP-level evidence gap left by SQL Server and service-level security 
 
 The API's results are asserted **exactly**, including persisted Role data returned through the real read route.
 
-**Issue uncovered by the first real HTTP run:** Role creation returned 201, but a System administrator's subsequent GET of that same persisted Master Role returned 500 because the normal tenant query filter hid Master-scoped definitions from null-tenant System principals. Backend PR #24 now explicitly bypasses the **read** filter only for `RoleGetById` rows with `TenantId == fixed Master Tenant`, after the SystemAdministrator authorization boundary. It does not bypass the write interceptor or reveal other tenants' roles. The PR-head SQL Server + HTTP job must reconfirm this fix.
+**Issue uncovered by the first real HTTP run:** Role creation returned 201, but a System administrator's subsequent GET of that same persisted Master Role returned 500 because the normal tenant query filter hid Master-scoped definitions from null-tenant System principals. Backend PR #24 now explicitly bypasses the **read** filter only for `RoleGetById` rows with `TenantId == fixed Master Tenant`, after the SystemAdministrator authorization boundary. It does not bypass the write interceptor or reveal other tenants' roles. The final PR-head SQL Server + HTTP job reconfirmed this fix.
 
 Follow-up HTTP coverage also validates `Roles/lookup` against the fixed Master role-assignment scope, rejects modifications to the reserved SUPERADMIN Role and reserved permission keys, and exercises Role deletion after cleanup. A later HTTP pass uncovered an unexpected GroupRole revoke 403 after normal GroupMember cleanup. The structured HTTP denial log identified `TenantSaveChangesInterceptor` rejecting a **Modified** GroupRole grant. The root cause was `GroupRole : FullAuditableEntity`: `AuditableEntityInterceptor` silently transformed the deletion into a soft-delete modification before the strict grant-write guard ran. It also risked leaving the GroupRole effective and blocking later re-grants behind its unique index.
 
@@ -57,4 +57,4 @@ Additional hardening under separate review: tamper-evident off-database Audit se
 
 **Verified PR-head evidence:** backend commit `c235c776a5d7a72a388c8ac3934106905cf555ff` passed [Build/Unit CI 39940613530](https://github.com/sholehamed/Shinera-backend/actions/runs/39940613530) and [SQL Server + real HTTP CI 39940613458](https://github.com/sholehamed/Shinera-backend/actions/runs/39940613458). The latter ran **20 real SQL Server regression tests** and **50 real OpenIddict HTTP assertions**, including Grant → Revoke → Re-Grant → Revoke of GroupRole and protected SuperAdmin/catalog boundaries. These are final feature-branch CI results, not independent post-merge or Production evidence.
 
-**Gate:** Keep both PRs Draft and [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11) OPEN pending explicit final review. Production granular authorization remains OFF.
+**Gate:** Backend PR #24 is merged after final review. [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11) remains OPEN; Production granular authorization remains OFF. CI evidence above is from the final PR head, not an independent post-merge or Production run.
