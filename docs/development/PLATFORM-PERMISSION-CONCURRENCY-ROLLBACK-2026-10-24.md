@@ -3,7 +3,7 @@
 **Date:** 2026-10-24  
 **Backend:** [Draft PR #28](https://github.com/sholehamed/Shinera-backend/pull/28)  
 **Issue:** [Backend P0 #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
-**Status:** In progress. Final SQL Server CI and final review pending. Not merged.
+**Status:** Final-head CI passed. Draft / final security and migration review pending. Not merged.
 
 ## Current schema risk
 
@@ -28,13 +28,13 @@ This index remains globally scoped because Permission definitions are shared ref
 | Legacy normalized duplicates before index migration | Migration refuses to proceed; no Permission/grant ID auto-rewritten |
 | Signed OpenIddict live HTTP Permission CRUD | Existing 89-check matrix remains green; duplicate conflict maps to 409 |
 
-These tests must use disposable SQL Server and actual EF migrations, never mocks or EF InMemory. Their outcomes are not yet claimed verified until CI completes.
+All tests used disposable SQL Server and actual EF migrations, not mocks or EF InMemory. **Final backend head `bd1ff8a0c3cadf0870f2383802bbf6ffce6a5875`** passed [Build/Unit CI 40023139711](https://github.com/sholehamed/Shinera-backend/actions/runs/40023139711) and [SQL Server + signed OpenIddict HTTP CI 40023139664](https://github.com/sholehamed/Shinera-backend/actions/runs/40023139664): **24/24 SQL Server tests and 89/89 real HTTP checks**, including the prior stale-JWT, persistence and denied-access audit assertions.
 
 ## Unfinished P0 acceptance gates
 
-- Exact final-branch Build/Unit, SQL migration, isolation and signed HTTP tests passing.
+- [x] Exact final-branch Build/Unit, SQL migration, isolation and signed HTTP tests passing (CI links above).
 - Review migration idempotency, backup/recovery, normalized collation and legacy-data preflight failures.
-- Deadlock determinism and concurrency test stability across repeated CI runs.
+- [ ] Deadlock determinism and concurrency test stability across repeated independent CI runs; a single CI pass is not an extended stress guarantee.
 - More extensive transaction fault injection for audited grant mutations, outbox/audit rollback, SQL outage, and realistic load/throughput.
 - Production Master grant inventory/bootstrap/backfill/cutover/rollback and final ADR-003 acceptance.
 
