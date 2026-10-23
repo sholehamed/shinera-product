@@ -24,6 +24,7 @@ Both are protected by the existing live `SystemAdministrator` requirement on the
 - The group and role must belong to the **Master Tenant**, and assignments additionally require both to be active. Existing non-privileged assignments can still be revoked from disabled groups/roles.
 - Assignment and revocation of `SUPERADMIN` via this API are both denied. **Any group already linked to a SuperAdmin role** is also protected from generic GroupRole mutation.
 - Self-affecting operations are denied if the acting administrator belongs to the target group, avoiding indirect self-granted privileges.
+- **Reverse-order self escalation is denied too:** the existing GroupMembers endpoint now refuses an administrator adding themselves to any platform group, including one that already holds a non-SuperAdmin role. The SQL Server regression tests this sequence explicitly.
 - Before granting a role, all current members must be active, unlocked, null-tenant **System** users. An empty group is valid. Inactive, locked-out, tenant-owned or otherwise ineligible group members make new assignment fail closed.
 - `TrustedTenantWriteScope` now has a dedicated temporary `GroupRoles` intent for an **exact `GroupId + RoleId` pair**. `TenantSaveChangesInterceptor` rejects any unrelated or in-place modified master authorization grant even within this temporary Master write scope. Direct `UserPermission` writes stay blocked.
 - Actor revalidation, read of group/role/membership and grant insertion/deletion occur under one SQL Server `Serializable` transaction, with the EF Core execution strategy retrying the complete unit.
@@ -33,7 +34,7 @@ Both are protected by the existing live `SystemAdministrator` requirement on the
 
 SQL Server regression test cases include authorized grant, duplicate grant, revoke and duplicate revoke; SuperAdmin role protection and privileged group protection; actor member/self-escalation; cross-tenant group/role, invalid member and inactive group denial; rollback on piggybacked UserRole mutations; and persisted administrator role revocation.
 
-**Backend Draft PR #18** has verified **passed** Build/Unit [run 39919612264](https://github.com/sholehamed/Shinera-backend/actions/runs/39919612264) and real SQL Server authorization [run 39919612059](https://github.com/sholehamed/Shinera-backend/actions/runs/39919612059) on exact PR-head `25b0e96eb2719e38b3e4f4154b58639d500f6a84`. These are feature-branch checks, **not post-merge or Production evidence**. Final security review and Merge remain pending.
+The previous [Build/Unit run 39919612264](https://github.com/sholehamed/Shinera-backend/actions/runs/39919612264) and [SQL Server run 39919612059](https://github.com/sholehamed/Shinera-backend/actions/runs/39919612059) passed on the original PR head. The security review discovered a **two-step administrator self-join escalation**, which has been patched on this branch with a new SQL Server regression. **Final updated PR-head CI must pass before merging; earlier green checks do not verify the fix.**
 
 ## Deferred security tasks
 
