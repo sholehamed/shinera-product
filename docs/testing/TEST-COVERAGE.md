@@ -80,3 +80,12 @@ This latest baseline supersedes the older table above for current counts and cov
 - **Latest PR-head checks passed:** [Backend CI 39872147609](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147609) **21/21** and [SQL Server CI 39872147628](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147628) **14/14**, plus API smoke. Production migration, complete granular System/Permission CRUD, HTTP permission revocation and SQL bulk/raw write isolation have not been validated.
 
 - [Backend PR #13](https://github.com/sholehamed/Shinera-backend/pull/13) **merged** at [`c05bda50`](https://github.com/sholehamed/Shinera-backend/commit/c05bda503a785f20a015c1e1aaa4c7df53e8ddf2). Final CI counts above refer to PR-head runs, not a separate post-merge SQL Server test run. Full Production rollout and permission-grant revocation HTTP testing remain open.
+
+
+## Merged slice — System Permission CRUD (2026-10-23)
+
+- [Backend PR #14](https://github.com/sholehamed/Shinera-backend/pull/14) adds SQL Server regression verifying denied edits to platform permission catalog keys, bounded scope disposal and live System role-revocation rejection; [Backend CI 39910550319](https://github.com/sholehamed/Shinera-backend/actions/runs/39910550319) **21/21 passed**; [SQL Server CI 39910550272](https://github.com/sholehamed/Shinera-backend/actions/runs/39910550272) **15/15 passed** on final PR head.
+- HTTP smoke adds anonymous Permission POST 401 and authenticated reserved catalog mutation POST 403, with opt-in Permission endpoint policy enabled only for the disposable Development SQL Server process.
+- No claim of all Permission positive CRUD HTTP coverage, complete arbitrary grant-mutation review, Production grant migration, transactional revocation, audit tamper resistance or full Issue #11 completion.
+
+- The CI script also executes real HTTP reserved Permission mutation (403) and anonymous Permission POST (401); both completed successfully after Bash escaping fix. These are successful final PR-head checks; no independent post-merge SQL Server run is claimed. Backend [PR #14](https://github.com/sholehamed/Shinera-backend/pull/14) merged at [`638e24c7`](https://github.com/sholehamed/Shinera-backend/commit/638e24c76ed4486c8967d4f119ea9a37a35f9f39).
