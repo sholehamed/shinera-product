@@ -29,7 +29,7 @@ Requests have no mutable TenantId payload; role and target identifiers are route
 
 ## Verification
 
-SQL Server integration scenarios were added for valid, idempotent grant/revoke; self-escalation refusal; reserved SuperAdmin role refusal; tenant or foreign-scope denial; denied operations preserving existing grants; and post-revocation stale admin credential refusal.
+SQL Server integration scenarios were added for valid, idempotent grant/revoke; self-escalation refusal; reserved SuperAdmin role refusal; tenant or foreign-scope denial; indefinite target lockout refusal; attempts to piggyback unauthorized GroupRole grants into the same SaveChanges; denied operations preserving existing grants; and post-revocation stale admin credential refusal.
 
 Build and SQL Server workflows must be verified on the final PR head before release. CI evidence recorded with final commit SHA rather than a historical branch run.
 
