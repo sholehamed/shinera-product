@@ -1,7 +1,7 @@
 # Shinera — Direct System Role grant/revoke (first secure slice)
 
 **Date:** 2026-10-23  
-**Status:** In development; backend Draft [PR #17](https://github.com/sholehamed/Shinera-backend/pull/17)  
+**Status:** Merged backend security slice [PR #17](https://github.com/sholehamed/Shinera-backend/pull/17) at [`52571097`](https://github.com/sholehamed/Shinera-backend/commit/52571097ea5bee2c19913982fb0d0e5068e9f7da); Production enforcement remains OFF  
 **Tracking:** [P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11), [ADR-003](../architecture/decisions/ADR-003-AUTHORIZATION-AND-PERMISSION-MODEL.md)  
 **Backend branch:** `security/platform-direct-grant-administration-20261023`
 
@@ -31,7 +31,7 @@ Requests have no mutable TenantId payload; role and target identifiers are route
 
 SQL Server integration scenarios were added for valid, idempotent grant/revoke; self-escalation refusal; reserved SuperAdmin role refusal; tenant or foreign-scope denial; indefinite target lockout refusal; attempts to piggyback unauthorized GroupRole grants into the same SaveChanges; denied operations preserving existing grants; and post-revocation stale admin credential refusal.
 
-Build and SQL Server workflows must be verified on the final PR head before release. CI evidence recorded with final commit SHA rather than a historical branch run.
+Final backend PR head `6c1d600a93285f2bce7035750c6a63c0a2873928` passed [Build/Unit CI 39916928238](https://github.com/sholehamed/Shinera-backend/actions/runs/39916928238) and [SQL Server authorization CI 39916927938](https://github.com/sholehamed/Shinera-backend/actions/runs/39916927938), then was squash-merged at [`52571097`](https://github.com/sholehamed/Shinera-backend/commit/52571097ea5bee2c19913982fb0d0e5068e9f7da). These are **PR-head checks**, not a separate post-merge SQL Server or Production verification.
 
 ## Deferred / P0 remaining
 
