@@ -30,7 +30,9 @@ Close the HTTP-level evidence gap left by SQL Server and service-level security 
 | System user Permission Allow / Deny / Clear (idempotent) | 204 |
 | Administrator attempting self-grant | 403 |
 
-The API's results are asserted **exactly**, including persisted Role data returned through the real read route. The earlier real SQL Server xUnit suite continues to verify audit-row counts, actor identity, rollback when Audit INSERT fails, and denial of unrelated tracked grant mutations.
+The API's results are asserted **exactly**, including persisted Role data returned through the real read route.
+
+**Issue uncovered by the first real HTTP run:** Role creation returned 201, but a System administrator's subsequent GET of that same persisted Master Role returned 500 because the normal tenant query filter hid Master-scoped definitions from null-tenant System principals. Backend PR #24 now explicitly bypasses the **read** filter only for `RoleGetById` rows with `TenantId == fixed Master Tenant`, after the SystemAdministrator authorization boundary. It does not bypass the write interceptor or reveal other tenants' roles. The PR-head SQL Server + HTTP job must reconfirm this fix. The earlier real SQL Server xUnit suite continues to verify audit-row counts, actor identity, rollback when Audit INSERT fails, and denial of unrelated tracked grant mutations.
 
 ## Disposable test-only setup
 
