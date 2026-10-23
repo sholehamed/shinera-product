@@ -33,6 +33,6 @@ This slice does not cover historical backfill, `UserGroup` membership, `RolePerm
 
 ## Verification
 
-Real SQL Server regressions assert that successful UserRole and GroupRole grant/revoke have one audit record per change; UserPermission Deny, Allow, Clear and explicit Allow generate audit entries; no-ops and denied requests do not. They also assert audit SQL `UPDATE` and `DELETE` are rejected.
+Real SQL Server regressions assert that successful UserRole and GroupRole grant/revoke have one audit record per change; UserPermission Deny, Allow, Clear and explicit Allow generate audit entries; no-ops and denied requests do not. They also assert audit SQL `UPDATE` and `DELETE` are rejected. A fault-injection test creates a temporary failing audit INSERT trigger, attempts an Allow-to-Deny replacement (two grant SaveChanges), and verifies the previously persisted Allow and audit count survive the error, proving rollback across the grant and audit statements.
 
 Build/Unit and SQL Server workflows on the **final backend PR head** must be checked before merge. Passing CI is not post-merge or production validation. Do not close Issue #11 or turn on granular Production flags.
