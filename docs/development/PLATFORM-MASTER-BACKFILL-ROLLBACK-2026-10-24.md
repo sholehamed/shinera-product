@@ -22,7 +22,7 @@ The input `Manifest` requires:
 
 The executor uses a SQL Server `Serializable` transaction, role-specific `sp_getapplock`, live Master/User/Role/Permission validation, strict before-image comparison and parameterized SQL. **Any mismatch fails closed**, rather than computing a new privilege proposal from the current database. On each grant it writes the RolePermission and an entry in existing append-only `PlatformGrantAuditEntries` **inside the same transaction**.
 
-Rollback accepts the exact same manifest, requires the entire expected after-image to match, and removes **only those exact new Row IDs** if they still match role, permission and `CreatedBy`. It appends compensating `revoke` audit rows in the same transaction. It cannot delete an unrelated pre-existing grant. A repeat apply/rollback fails closed; there is no force-overwrite option.
+Rollback accepts the exact same manifest, requires the entire expected after-image to match, and removes **only those exact new Row IDs** if they still match role, permission and `CreatedBy`. Before deletion it also requires a previously committed append-only `grant` audit for the fixed Master scope, actor, role and permission; otherwise it fails closed, **even if the row ID and creator happen to match**. It appends compensating `revoke` audit rows in the same transaction. A repeat apply/rollback fails closed; there is no force-overwrite option. These checks reduce accidental revocation risk, but because the historical ledger does **not** capture `RolePermission.Id` or `BatchId`, they cannot prove row-level batch provenance.
 
 ## Limitations and controls not to skip
 
@@ -36,7 +36,8 @@ A separate production-only offline operator tool, fully reviewed two-person appr
 
 - Exact approved single-grant addition adds one RolePermission row and one append-only audit event.
 - Reapplying the identical manifest fails because before-image has changed; the existing unrelated grant remains untouched.
-- Exact rollback removes only the new Row ID and appends one `revoke` audit entry. Second rollback is denied.
+- Exact rollback checks committed grant-audit evidence, removes only the new Row ID and appends one `revoke` audit entry. Second rollback is denied.
+- A fabricated rollback pointing at a manually inserted row with matching actor/ID/permission, but no prior grant-audit record, is rejected without deleting the row.
 - Unexpected unrelated RolePermission between approval and execution blocks apply with zero new writes.
 - Simulated SQL audit insert failure causes the grant insert to roll back atomically; an explicit later replay is possible.
 - A wrong target database name and revoked independent reviewer both fail without a new RolePermission or audit row.
