@@ -1,8 +1,8 @@
 # Shinera — Platform Permission Catalog and staged enforcement
 
 **Date:** 2026-10-23  
-**State:** Draft — not merged and NOT enabled in Production  
-**Backend implementation:** [Draft PR #13](https://github.com/sholehamed/Shinera-backend/pull/13)  
+**State:** Scoped catalog foundation merged to backend `main`; granular enforcement remains OFF by default and is NOT activated in Production  
+**Backend implementation:** [Merged PR #13](https://github.com/sholehamed/Shinera-backend/pull/13)  
 **Architecture:** [ADR-003](../architecture/decisions/ADR-003-AUTHORIZATION-AND-PERMISSION-MODEL.md)  
 **Related:** [Backend Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11), [Tenant write isolation Issue #9](https://github.com/sholehamed/Shinera-backend/issues/9)
 
@@ -70,3 +70,9 @@ The new flags are **OFF by default**:
 - SeedDefinitionsAsync never automatically restores RolePermission grants or reactivates inactive definitions. Production never invokes GrantDevelopmentSuperAdminAsync through the startup code. Both granular Role endpoint checks and Development grant bootstrap are OFF by default.
 - **Security scope limitation:** the SQL Server HTTP smoke demonstrates positive operation with the opt-in granted, not a full negative HTTP matrix for revoked `ROLES.CREATE`. Permission CRUD and other grant-mutation paths still use the broader SystemAdministrator policy; a privileged operator could potentially modify permission definitions/grants outside the newly gated Role endpoints. Until these paths are locked down, **do not use the feature flag in Production as proof of granular least privilege**.
 - BootstrapDevelopmentGrants deliberately restores any missing Development SuperAdmin grants on startup if left enabled. It must remain OFF for revocation tests and non-disposable deployments. Additional production migration, credential and durable authorization audit work remains in [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11).
+
+## Final merge record — 2026-10-23
+
+- [Backend PR #13](https://github.com/sholehamed/Shinera-backend/pull/13) squash merged at [`c05bda50`](https://github.com/sholehamed/Shinera-backend/commit/c05bda503a785f20a015c1e1aaa4c7df53e8ddf2), after conflict-free review and two successful CI gates at source head `9f160ea37925484e2bce1f0f44682f7d39c8c4ba`.
+- Verified before merge: [Backend CI 39872147609](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147609) **21/21 xUnit + Release Build**; [SQL Server CI 39872147628](https://github.com/sholehamed/Shinera-backend/actions/runs/39872147628) **14/14 SQL Server** and disposable Development HTTP login, Role POST and foreign-scope rejection smoke.
+- Neither automatic Production grants nor Production activation of the granular Role policies were performed. The new enforcement feature flag remains OFF by default. This merge is **not** the end of [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11): secure Permission CRUD, privilege escalation countermeasures, audited one-time grant migration, richer HTTP revocation testing and bypass audits remain outstanding.
