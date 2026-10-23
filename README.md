@@ -21,6 +21,7 @@ Canonical product and engineering documentation for [Shinera](https://github.com
 - [Persisted System API 401/403 denial audit (merged slice; Issue #11 open)](docs/development/PLATFORM-DENIED-ACCESS-AUDIT-2026-10-23.md)
 - [Permission Code SQL uniqueness and concurrency/rollback (merged slice; Issue #11 open)](docs/development/PLATFORM-PERMISSION-CONCURRENCY-ROLLBACK-2026-10-24.md)
 - [Production Master grant inventory and gated cutover plan (merged inventory slice; Issue #11 open)](docs/development/PLATFORM-MASTER-PRODUCTION-CUTOVER-2026-10-24.md)
+- [Production Master approved backfill and exact rollback (Draft; Issue #11 open)](docs/development/PLATFORM-MASTER-BACKFILL-ROLLBACK-2026-10-24.md)
 - [Staged System Permission Catalog (Draft)](docs/development/PLATFORM-PERMISSION-CATALOG-2026-10-23.md)
 - [Permission Catalog engineering log](docs/development/ENGINEERING-LOG-PLATFORM-PERMISSIONS-2026-10-23.md)
 - [System Role write authorization (merged foundation; Issue #11 follow-ups)](docs/development/PLATFORM-ROLE-WRITES-2026-10-23.md)
