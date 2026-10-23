@@ -3,7 +3,7 @@
 **Date:** 2026-10-23  
 **Backend:** [Draft PR #27](https://github.com/sholehamed/Shinera-backend/pull/27)  
 **Tracking:** [P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
-**Status:** Draft / CI verification pending; not merged
+**Status:** CI-verified Draft; final review/merge pending
 
 ## Security objective
 
@@ -42,4 +42,6 @@ It also attempts to UPDATE an audit row directly in SQL Server, which the append
 
 Denial logging is scoped to SystemAdministrator APIs; authorization failure on arbitrary Tenant/public endpoints, routine validation 400/404/409, and upstream failures before the middleware are not captured by this policy. Potential audit flooding from unauthenticated traffic, write throughput, alerting, TTL/retention, DBA separation and off-database tamper evidence remain operational and security review items. There is intentionally no new Audit Reader endpoint or default production granular permissions.
 
-**Acceptance gate:** passing latest backend Build/Unit and real SQL Server/HTTP CI on the new branch plus code/security review. [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11) remains open for concurrency/rollback, safe Production fixed-Master grant cutover, ADR-003 acceptance and remaining audit hardening.
+**Verified PR-head CI:** backend head `f4e8456aed94ab9a48bf94e3fda20b2bc3bb8638` passed [Build/Unit CI 40019987231](https://github.com/sholehamed/Shinera-backend/actions/runs/40019987231) and [real SQL Server + HTTP CI 40019987299](https://github.com/sholehamed/Shinera-backend/actions/runs/40019987299): **20/20 SQL Server regressions**, **89/89 real signed OpenIddict HTTP status assertions**, and a CI-only SQL read proving four committed denied-access audit categories plus UPDATE trigger rejection. An intermediate implementation used a fresh SqlConnection created from a previously opened EF DbConnection.ConnectionString; this caused a fail-closed HTTP 503 regression during denial. The final implementation obtains an **unopened DI-registered connection factory** instead; both latest-head CI workflows passed. No sensitive connection details are logged.
+
+**Remaining gate:** final code/security review and explicit merge decision. These CI results are **PR-head evidence only**, not Production verification or post-merge SQL integration evidence. [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11) remains open for concurrency/rollback, safe Production fixed-Master grant cutover, ADR-003 acceptance and remaining audit hardening.
