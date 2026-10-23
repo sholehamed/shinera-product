@@ -33,7 +33,7 @@ Both are protected by the existing live `SystemAdministrator` requirement on the
 
 SQL Server regression test cases include authorized grant, duplicate grant, revoke and duplicate revoke; SuperAdmin role protection and privileged group protection; actor member/self-escalation; cross-tenant group/role, invalid member and inactive group denial; rollback on piggybacked UserRole mutations; and persisted administrator role revocation.
 
-**Backend Draft PR #18** must pass both current-head Build/Unit and real SQL Server workflow before any merge. Record exact CI run IDs and merge commit in this report upon approval.
+**Backend Draft PR #18** has verified **passed** Build/Unit [run 39919612264](https://github.com/sholehamed/Shinera-backend/actions/runs/39919612264) and real SQL Server authorization [run 39919612059](https://github.com/sholehamed/Shinera-backend/actions/runs/39919612059) on exact PR-head `25b0e96eb2719e38b3e4f4154b58639d500f6a84`. These are feature-branch checks, **not post-merge or Production evidence**. Final security review and Merge remain pending.
 
 ## Deferred security tasks
 
