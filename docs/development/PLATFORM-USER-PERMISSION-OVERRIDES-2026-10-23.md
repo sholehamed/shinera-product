@@ -41,11 +41,11 @@ This permission check is **additional to** the coarse `SystemAdministrator` role
 - Changing Allow ↔ Deny removes and recreates the same unique grant row via two guarded SaveChanges **inside one database transaction**. Partial changes roll back if the second write fails. In-place grant edits remain forbidden.
 - Structured actor, subject, permission and action logging is emitted for changed grants, but this **does not constitute durable/tamper-evident audit**.
 
-## Regression evidence (pending final CI)
+## Regression evidence (verified on PR head)
 
 New real SQL Server test covers inherited authorization through both Role and Group, Deny precedence, Allow restoration, removal restoring inherited behavior, idempotency, no inherited Export/explicit Allow, self, tenant, SuperAdmin, reserved catalog refusal, piggybacked grant rollback, and revoked administrator grant refusal.
 
-Verify final PR-head Build/Unit and SQL Server integration checks before any merge, and record their exact run URLs and commit. PR-head green is not Production or post-merge verification.
+[Backend Build/Unit run 39921680594](https://github.com/sholehamed/Shinera-backend/actions/runs/39921680594) **passed** and [SQL Server authorization run 39921680707](https://github.com/sholehamed/Shinera-backend/actions/runs/39921680707) **passed** on exact backend PR head `e71a1a19b9538cd5dcbc0a415c6df3e1eeeecb36`. These are feature-branch checks, not Production or post-merge verification. Final security review and Merge remain separate.
 
 ## Deferred P0 requirements
 
