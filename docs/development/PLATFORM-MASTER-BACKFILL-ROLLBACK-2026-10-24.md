@@ -39,6 +39,7 @@ A separate production-only offline operator tool, fully reviewed two-person appr
 - Exact rollback removes only the new Row ID and appends one `revoke` audit entry. Second rollback is denied.
 - Unexpected unrelated RolePermission between approval and execution blocks apply with zero new writes.
 - Simulated SQL audit insert failure causes the grant insert to roll back atomically; an explicit later replay is possible.
+- A wrong target database name and revoked independent reviewer both fail without a new RolePermission or audit row.
 - Existing SQL and OpenIddict real HTTP suite must remain green; no endpoint or authorization flag changes.
 
 **Next:** finalize fail-closed review and CI, then add an operator-signed batch receipt/ledger, independently verified approval, exact row attribution, recovery orchestration and Production rollout rehearsals before Stage 5C cutover/ADR-003 acceptance.
