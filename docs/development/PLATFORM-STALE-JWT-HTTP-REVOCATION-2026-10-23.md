@@ -1,8 +1,8 @@
 # Real HTTP stale-SuperAdmin JWT revocation — Issue #11
 
 **Date:** 2026-10-23  
-**Status:** Draft PR; latest backend PR-head CI verified (not merged)  
-**Backend:** [PR #25](https://github.com/sholehamed/Shinera-backend/pull/25)  
+**Status:** Backend PR #25 squash-merged after final review; latest PR-head CI passed  
+**Backend:** [PR #25](https://github.com/sholehamed/Shinera-backend/pull/25) · [merged commit `674f93fc`](https://github.com/sholehamed/Shinera-backend/commit/674f93fc5e2c0675b728511ecbd2694953378cd3)  
 **Tracking:** [Backend Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
 **Baseline:** [merged HTTP authorization matrix, PR #24](PLATFORM-AUTHORIZATION-HTTP-E2E-2026-10-23.md)
 
@@ -34,6 +34,6 @@ The real HTTP matrix continues to cover previously reviewed Role/Permission, Use
 
 ## Exit criteria and remaining Issue #11
 
-**Verified final PR-head CI:** Backend head `ba1428f7b9ffe9646bf26e258c05af5b88e9859d` passed [Build/Unit CI 40011896961](https://github.com/sholehamed/Shinera-backend/actions/runs/40011896961) and [real SQL Server + HTTP CI 40011896905](https://github.com/sholehamed/Shinera-backend/actions/runs/40011896905): **20/20 real SQL Server regressions**, **54/54 live HTTP checks**, successful CI-only SQL helper build and one persisted seeded SuperAdmin role removal. The same previously valid bearer returned **403** for privileged GET/POST and the refresh flow returned **400 invalid_grant**. **Still required:** final security review, merge decision, and independent post-merge evidence. These CI results are NOT Production verification.
+**Verified final PR-head CI:** Backend head `ba1428f7b9ffe9646bf26e258c05af5b88e9859d` passed [Build/Unit CI 40011896961](https://github.com/sholehamed/Shinera-backend/actions/runs/40011896961) and [real SQL Server + HTTP CI 40011896905](https://github.com/sholehamed/Shinera-backend/actions/runs/40011896905): **20/20 real SQL Server regressions**, **54/54 live HTTP checks**, successful CI-only SQL helper build and one persisted seeded SuperAdmin role removal. The same previously valid bearer returned **403** for privileged GET/POST and the refresh flow returned **400 invalid_grant**. **Final review completed and Backend PR #25 merged** at [`674f93fc`](https://github.com/sholehamed/Shinera-backend/commit/674f93fc5e2c0675b728511ecbd2694953378cd3). A separate post-merge SQL Server E2E run is not part of the PR-head evidence and must not be inferred. These CI results are NOT Production verification.
 
 **Still open under Issue #11:** broader real HTTP Permission CRUD / negative error mapping, audit of denied attempts, concurrency/deadlock tests, Production fixed-Master bootstrap/migration/backfill and rollback, plus final ADR-003/acceptance review. Production granular authorization flags remain **OFF**.
