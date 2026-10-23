@@ -1,6 +1,6 @@
 # P0 Stage 5B — Explicit Master grant backfill and exact rollback
 
-**Status:** Draft implementation slice, NOT a Production deployment approval  
+**Status:** CI-verified Draft implementation slice, NOT a Production deployment approval  
 **Backend:** [Stage 5B branch](https://github.com/sholehamed/Shinera-backend/tree/security/platform-master-approved-backfill-rollback-20261024)  
 **Tracking:** [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
 **Prior gate:** [Stage 5A reviewed inventory](PLATFORM-MASTER-PRODUCTION-CUTOVER-2026-10-24.md)
@@ -43,3 +43,7 @@ A separate production-only offline operator tool, fully reviewed two-person appr
 - Existing SQL and OpenIddict real HTTP suite must remain green; no endpoint or authorization flag changes.
 
 **Next:** finalize fail-closed review and CI, then add an operator-signed batch receipt/ledger, independently verified approval, exact row attribution, recovery orchestration and Production rollout rehearsals before Stage 5C cutover/ADR-003 acceptance.
+
+## CI evidence (backend PR-head only)
+
+Latest Backend head `aad8a86c3ef97d339c86513c815fee32b9f7a760` passed [Build/Unit run 40028775292](https://github.com/sholehamed/Shinera-backend/actions/runs/40028775292) and [real SQL Server and OpenIddict HTTP run 40028775255](https://github.com/sholehamed/Shinera-backend/actions/runs/40028775255), **31/31 SQL Server tests and 89/89 HTTP checks**. This is disposable SQL Server CI evidence, not a Production rehearsal, nor a cryptographically approved execution mechanism. Both PRs remain Draft; the actual cutover is not approved.
