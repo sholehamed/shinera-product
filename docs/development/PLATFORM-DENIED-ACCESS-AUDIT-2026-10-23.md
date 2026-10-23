@@ -25,7 +25,7 @@ SQL Server table `dbo.PlatformAccessDenialAuditEntries` stores:
 | Outcome | `challenge` for HTTP 401 or `forbidden` for HTTP 403 |
 | OccurredAtUtc | SQL Server-generated UTC timestamp |
 
-The handler never writes raw authorization headers, JWTs, refresh tokens, cookies, request/response bodies, IP addresses, real request paths/query parameters or SQL exception text. The SQL table has **no EF DbSet**, and a SQL Server trigger blocks UPDATE/DELETE for append-only DML; this is **not cryptographically tamper-evident** against DBA/DDL privileges. Audit writes use independent autocommit SQL, not a rolled-back grant operation. If an audit insert fails, the request remains denied and the response becomes HTTP 503, not an authorization success.
+The handler never writes raw authorization headers, JWTs, refresh tokens, cookies, request/response bodies, IP addresses, real request paths/query parameters or SQL exception text. The SQL table has **no EF DbSet**, and a SQL Server trigger blocks UPDATE/DELETE for append-only DML; this is **not cryptographically tamper-evident** against DBA/DDL privileges. Audit writes use a **separate, parameterized SQL connection** with independent autocommit, never the rejected request's DbContext transaction/change tracker. If an audit insert fails, the request remains denied and the response becomes HTTP 503, not an authorization success.
 
 ## Real HTTP + SQL Server tests
 
