@@ -2,8 +2,8 @@
 
 **Date:** 2026-10-23  
 **Tracking:** [Backend P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
-**Backend:** [Draft PR #26](https://github.com/sholehamed/Shinera-backend/pull/26)  
-**Status:** Draft; latest backend PR-head CI passed; final security review/merge pending
+**Backend:** [PR #26](https://github.com/sholehamed/Shinera-backend/pull/26) · [merged commit `016186ae`](https://github.com/sholehamed/Shinera-backend/commit/016186ae3ff9f70e1179048164d0ea2f143bf6f2)  
+**Status:** Backend PR #26 reviewed and squash-merged; latest PR-head CI passed
 
 ## Problem seen in the current code
 
@@ -30,8 +30,12 @@ It does not enable Production Resource.Action enforcement, migrate any Master gr
 
 The tests make actual signed OpenIddict HTTP requests to the .NET API with a disposable SQL Server. Permission state is read back through the public endpoint after successful writes.
 
+## Review limitation: concurrent duplicates
+
+The verified HTTP 409 duplicate-code behavior is **sequential**. The current Permission table does not have an enforced unique index on normalized Code. Parallel create/update requests could pass the pre-write check and create duplicate codes until a reviewed data cleanup/index migration and concurrency regression are added. This is tracked under the separate concurrency/Production rollout acceptance work for Issue #11; this slice does not claim database-level uniqueness or production-ready concurrency guarantees.
+
 ## Remaining acceptance work
 
 This slice focuses on Permission CRUD error contracts and does not close Issue #11. Remaining: durable denied-attempt audit, reviewed concurrency/deadlock and transactional fault injection, safe Production Master grant inventory/bootstrap/backfill/cutover/rollback, and final ADR-003 acceptance review.
 
-**Verified latest backend PR-head evidence:** backend commit `b443883b3f19d5ba6b6b8eed87d7601ad384404c` passed [Build/Unit run 40014800301](https://github.com/sholehamed/Shinera-backend/actions/runs/40014800301) and [SQL Server + real OpenIddict HTTP run 40014800305](https://github.com/sholehamed/Shinera-backend/actions/runs/40014800305). Logs confirm **20/20 SQL Server regression tests** and **89/89 signed HTTP status checks**, including persisted Permission CRUD and previous stale-JWT/revoked refresh regression. Initial SQL Server CI on the first implementation head failed one legacy direct-gateway test because HTTP shape validation was incorrectly required for non-HTTP callers; this was corrected on the latest head without weakening reserved catalog or live actor checks. These checks are PR-head evidence, **not merged-main, Production or comprehensive global HTTP error-contract verification**.
+**Verified latest backend PR-head evidence:** backend commit `b443883b3f19d5ba6b6b8eed87d7601ad384404c` passed [Build/Unit run 40014800301](https://github.com/sholehamed/Shinera-backend/actions/runs/40014800301) and [SQL Server + real OpenIddict HTTP run 40014800305](https://github.com/sholehamed/Shinera-backend/actions/runs/40014800305). Logs confirm **20/20 SQL Server regression tests** and **89/89 signed HTTP status checks**, including persisted Permission CRUD and previous stale-JWT/revoked refresh regression. Initial SQL Server CI on the first implementation head failed one legacy direct-gateway test because HTTP shape validation was incorrectly required for non-HTTP callers; this was corrected on the latest head without weakening reserved catalog or live actor checks. **Final security review was completed and Backend PR #26 squash-merged** at [`016186ae`](https://github.com/sholehamed/Shinera-backend/commit/016186ae3ff9f70e1179048164d0ea2f143bf6f2). These checks are PR-head evidence, **not independent post-merge SQL Server E2E, Production or comprehensive global HTTP error-contract verification**.
