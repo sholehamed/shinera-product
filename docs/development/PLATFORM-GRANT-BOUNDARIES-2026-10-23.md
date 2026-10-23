@@ -1,7 +1,7 @@
 # Shinera — Target-scoped platform grant write boundaries
 
 **Date:** 2026-10-23  
-**Status:** In progress / draft, not merged  
+**Status:** Merged security slice at [`a80450d1`](https://github.com/sholehamed/Shinera-backend/commit/a80450d1f33c615d0502527c3f972a08e9ef3d8b); Production granular enforcement remains OFF  
 **Backend:** [PR #16](https://github.com/sholehamed/Shinera-backend/pull/16) — `security/platform-grant-boundaries-20261023`  
 **Tracking:** [P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11) and [ADR-003](../architecture/decisions/ADR-003-AUTHORIZATION-AND-PERMISSION-MODEL.md)
 
@@ -11,7 +11,7 @@ A validated System SuperAdmin previously received a temporary Master write scope
 
 A writable Master TenantId is **not itself** permission to change every grant or assign arbitrary roles. Read filter bypass and trusted master write scope are not universal permission bypasses.
 
-## Implemented reviewable security slice
+## Implemented and merged security slice
 
 - `TrustedTenantWriteScope` now holds a one-operation, disposable grant intent within an already validated platform master write. It only supports `RolePermissions` for one `RoleId` and `GroupMembers` for one `GroupId`.
 - `TenantSaveChangesInterceptor` rejects master-scoped `UserRole`, `GroupRole` and `UserPermission` mutations during ordinary platform operations. They require separate explicitly designed authorization APIs and migration policy.
@@ -25,7 +25,7 @@ New SQL Server regression verifies that a general trusted master scope cannot cr
 
 - [Build/xUnit](https://github.com/sholehamed/Shinera-backend/actions/runs/39914356700): **passed** on backend PR-head `c248dad0b1c291b766fd493eab24edf7c5f59283`.
 - [Real SQL Server authorization](https://github.com/sholehamed/Shinera-backend/actions/runs/39914356804): **passed** on the same PR head.
-- Do not claim post-merge verification or Production rollout from PR-head CI alone.
+- Both workflows passed on the final reviewed PR head before the backend was squash-merged. These checks are **not** a separate post-merge or Production verification.
 
 ## Explicit remaining P0 work
 
