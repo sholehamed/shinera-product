@@ -1,7 +1,7 @@
 # Platform System group membership revocation — transactional audit
 
 **Date:** 2026-10-23  
-**Status:** In progress — [Backend Draft PR #23](https://github.com/sholehamed/Shinera-backend/pull/23)  
+**Status:** Merged [Backend PR #23](https://github.com/sholehamed/Shinera-backend/pull/23) into backend main at [`0b791934`](https://github.com/sholehamed/Shinera-backend/commit/0b7919344c2ad8bb62683daa774b26ccf5b5b336); Issue #11 remains OPEN  
 **Backend branch:** `security/platform-group-member-removal-audit-20261023`  
 **Tracking:** [Backend P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)
 
@@ -27,7 +27,7 @@ Audit records remain append-only for ordinary SQL DML. This does **not** defend 
 
 ## Verification
 
-Real SQL Server integration tests extend the group membership test to cover protected group/foreign user/self restrictions, successful and idempotent revoke, failed audit insertion rolling back a deletion, unrelated tracked membership rollback, cleaning up an inactive System member, and a revoked administrator token. [Build/Unit CI 39932889770](https://github.com/sholehamed/Shinera-backend/actions/runs/39932889770) and [real SQL Server authorization CI 39932889728](https://github.com/sholehamed/Shinera-backend/actions/runs/39932889728) both **passed** on exact backend PR head `947da057838642c72f28b00c9c1c9ac5a9583083`, including SQL regression and API startup smoke. This is feature-branch evidence, not independent post-merge or Production verification.
+Real SQL Server integration tests extend the group membership test to cover protected group/foreign user/self restrictions, successful and idempotent revoke, failed audit insertion rolling back a deletion, unrelated tracked membership rollback, cleaning up an inactive System member, and a revoked administrator token. [Build/Unit CI 39932889770](https://github.com/sholehamed/Shinera-backend/actions/runs/39932889770) and [real SQL Server authorization CI 39932889728](https://github.com/sholehamed/Shinera-backend/actions/runs/39932889728) both **passed** on exact backend PR head `947da057838642c72f28b00c9c1c9ac5a9583083`, including SQL regression and API startup smoke. The backend was squash-merged at [`0b791934`](https://github.com/sholehamed/Shinera-backend/commit/0b7919344c2ad8bb62683daa774b26ccf5b5b336) after final security review. CI above is final PR-head evidence, **not independent post-merge SQL Server or Production verification**.
 
 ## Remaining Issue #11
 
