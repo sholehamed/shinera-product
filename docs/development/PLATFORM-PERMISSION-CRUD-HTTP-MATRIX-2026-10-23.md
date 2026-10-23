@@ -3,7 +3,7 @@
 **Date:** 2026-10-23  
 **Tracking:** [Backend P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
 **Backend:** [Draft PR #26](https://github.com/sholehamed/Shinera-backend/pull/26)  
-**Status:** In progress; latest PR-head CI and final security review pending
+**Status:** Draft; latest backend PR-head CI passed; final security review/merge pending
 
 ## Problem seen in the current code
 
@@ -34,4 +34,4 @@ The tests make actual signed OpenIddict HTTP requests to the .NET API with a dis
 
 This slice focuses on Permission CRUD error contracts and does not close Issue #11. Remaining: durable denied-attempt audit, reviewed concurrency/deadlock and transactional fault injection, safe Production Master grant inventory/bootstrap/backfill/cutover/rollback, and final ADR-003 acceptance review.
 
-**Evidence:** Pending completion of latest backend Draft PR #26 CI. Do not claim merge, Production validation, or universal status mapping outside the explicit covered endpoints.
+**Verified latest backend PR-head evidence:** backend commit `b443883b3f19d5ba6b6b8eed87d7601ad384404c` passed [Build/Unit run 40014800301](https://github.com/sholehamed/Shinera-backend/actions/runs/40014800301) and [SQL Server + real OpenIddict HTTP run 40014800305](https://github.com/sholehamed/Shinera-backend/actions/runs/40014800305). Logs confirm **20/20 SQL Server regression tests** and **89/89 signed HTTP status checks**, including persisted Permission CRUD and previous stale-JWT/revoked refresh regression. Initial SQL Server CI on the first implementation head failed one legacy direct-gateway test because HTTP shape validation was incorrectly required for non-HTTP callers; this was corrected on the latest head without weakening reserved catalog or live actor checks. These checks are PR-head evidence, **not merged-main, Production or comprehensive global HTTP error-contract verification**.
