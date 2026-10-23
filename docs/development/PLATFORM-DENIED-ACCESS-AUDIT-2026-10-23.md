@@ -1,9 +1,9 @@
 # Persisted denied System API authorization audit — Issue #11
 
 **Date:** 2026-10-23  
-**Backend:** [Draft PR #27](https://github.com/sholehamed/Shinera-backend/pull/27)  
+**Backend:** [PR #27](https://github.com/sholehamed/Shinera-backend/pull/27) · [squash commit `a7d9c178`](https://github.com/sholehamed/Shinera-backend/commit/a7d9c178c17b57078c1069508990dc3c03dd4f02)  
 **Tracking:** [P0 Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11)  
-**Status:** CI-verified Draft; final review/merge pending
+**Status:** Backend security slice reviewed and merged; feature-head CI passed
 
 ## Security objective
 
@@ -44,4 +44,4 @@ Denial logging is scoped to SystemAdministrator APIs; authorization failure on a
 
 **Verified PR-head CI:** backend head `f4e8456aed94ab9a48bf94e3fda20b2bc3bb8638` passed [Build/Unit CI 40019987231](https://github.com/sholehamed/Shinera-backend/actions/runs/40019987231) and [real SQL Server + HTTP CI 40019987299](https://github.com/sholehamed/Shinera-backend/actions/runs/40019987299): **20/20 SQL Server regressions**, **89/89 real signed OpenIddict HTTP status assertions**, and a CI-only SQL read proving four committed denied-access audit categories plus UPDATE trigger rejection. An intermediate implementation used a fresh SqlConnection created from a previously opened EF DbConnection.ConnectionString; this caused a fail-closed HTTP 503 regression during denial. The final implementation obtains an **unopened DI-registered connection factory** instead; both latest-head CI workflows passed. No sensitive connection details are logged.
 
-**Remaining gate:** final code/security review and explicit merge decision. These CI results are **PR-head evidence only**, not Production verification or post-merge SQL integration evidence. [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11) remains open for concurrency/rollback, safe Production fixed-Master grant cutover, ADR-003 acceptance and remaining audit hardening.
+**Review and merge:** final code/security review completed; [Backend PR #27](https://github.com/sholehamed/Shinera-backend/pull/27) was squash-merged at [`a7d9c178`](https://github.com/sholehamed/Shinera-backend/commit/a7d9c178c17b57078c1069508990dc3c03dd4f02). The reported SQL Server and HTTP successes remain **feature-head evidence**, not independent post-merge SQL Server or Production verification. Known operational restrictions remain open. [Issue #11](https://github.com/sholehamed/Shinera-backend/issues/11) remains open for concurrency/rollback, safe Production fixed-Master grant cutover, ADR-003 acceptance and remaining audit hardening.
