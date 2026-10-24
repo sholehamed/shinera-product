@@ -56,3 +56,13 @@ The Playwright tests cover actual System admin browser login, protected dashboar
 - No additional authentication/security infrastructure overhaul is needed for this first UI integration slice; keep Production granular enforcement OFF and P0 Issue #11 outstanding release gates separate.
 
 **Release interpretation:** This documents a working, tested initial System Admin vertical slice **in Draft**, not a claim that all current admin UI screens are functionally complete or deployable to real customers.
+
+## Same-stage extension — access-management resource screens (2026-10-24)
+
+The original `Permission`, `ApiResource`, `UiResource` and `Resource` pages are **kept and repaired**, not re-created from scratch.
+
+- System sidebar now adds a dedicated «مدیریت دسترسی» section and merges its links with persisted dynamic menu items without route duplicates. The server remains the source of authorization.
+- Original scoped list endpoints `POST /system/{Permissions|ApiResources|UiResources}/{resourceId}/pagedList` remain. The backend Draft PR #32 adds corresponding root/global `POST /system/{Permissions|ApiResources|UiResources}/pagedList`, restricted by the existing `SystemAdministrator` policy; top-level System menu links no longer send `undefined` as a resource ID.
+- CRUD delete actions are now wired, and forms follow actual enum and resource contracts (UI PAGE/ACTION/FIELD/WIDGET; API HTTP verb/source; Permission linked API/UI Resource array); ApiResource sync remains resource-scoped only.
+- New cross-repo Playwright case creates disposable Module → Resource → ApiResource + UiResource → Permission, verifies global/scoped paged lists, live GET/PUT updates, permission resource associations and deletion. It also asserts the three System menu links are navigable. **Do not claim this expanded suite is green until the latest run completes and is checked.**
+- [Frontend implementation audit](https://github.com/sholehamed/Shinera-frontend/blob/fix/system-admin-real-api-e2e-20261024/docs/SYSTEM-ADMIN-PAGE-AUDIT-2026-10-24.md). Both engineering PRs and Product PR #28 remain Draft. No production grants or rollout.
