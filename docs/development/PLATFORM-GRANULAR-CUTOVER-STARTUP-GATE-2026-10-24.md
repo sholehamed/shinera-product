@@ -1,8 +1,8 @@
 # P0 Issue #11 — Stage 5C: Production granular authorization startup interlock
 
 **Date:** 2026-10-24  
-**Status:** Draft implementation slice. **Not a Production deployment or cutover approval.**  
-**Code:** [Backend Stage 5C branch](https://github.com/sholehamed/Shinera-backend/tree/security/platform-granular-cutover-startup-gate-20261024)  
+**Status:** Reviewed and merged **startup-safeguard code**. **Not a Production deployment or cutover approval.**  
+**Code:** [Backend PR #31](https://github.com/sholehamed/Shinera-backend/pull/31) · [merged commit `e6186d4b`](https://github.com/sholehamed/Shinera-backend/commit/e6186d4bc619e8b741cf7f1226f299976899a9f0)  
 **Earlier stages:** [5A inventory](PLATFORM-MASTER-PRODUCTION-CUTOVER-2026-10-24.md), [5B offline backfill/rollback](PLATFORM-MASTER-BACKFILL-ROLLBACK-2026-10-24.md)
 
 ## What changed
@@ -54,6 +54,6 @@ If any condition fails, **Startup throws before registering platform endpoints**
 
 ## Verified PR-head test evidence
 
-[Backend PR #31](https://github.com/sholehamed/Shinera-backend/pull/31), head `4a941c2f5b15feaa24e42d3c79eb2c3dcf1ebed8`, passed [Build/Unit CI 40086712581](https://github.com/sholehamed/Shinera-backend/actions/runs/40086712581) and [real SQL Server + signed HTTP CI 40086712579](https://github.com/sholehamed/Shinera-backend/actions/runs/40086712579): **36/36 real disposable SQL Server tests** (three new cutover gate cases), **89/89 signed OpenIddict HTTP assertions** and persisted denial audit checks. These are not a Production simulation or proof of signed deployment authorization. Both PRs remain Draft and unmerged.
+Final [Backend PR #31](https://github.com/sholehamed/Shinera-backend/pull/31) head `6b06465b13d4ffc73cd8c56e8f0a3bdb88c92b2f` passed [Build/Unit CI 40088341030](https://github.com/sholehamed/Shinera-backend/actions/runs/40088341030) and [real SQL Server + signed HTTP CI 40088341048](https://github.com/sholehamed/Shinera-backend/actions/runs/40088341048): **38/38 real disposable SQL Server tests** (five Stage 5C checks, including two live schema-drift cases), **89/89 signed OpenIddict HTTP assertions** and persisted denial-audit checks. The final security review caught and closed the migration-ledger-only readiness gap. Backend #31 was squash-merged at [`e6186d4b`](https://github.com/sholehamed/Shinera-backend/commit/e6186d4bc619e8b741cf7f1226f299976899a9f0). These results are final **pre-merge PR-head CI**, not a Production deployment, independent post-merge SQL/HTTP run or signed operator approval.
 
 **No Production configuration was changed. Issue #11 stays OPEN until a supervised live change-control rehearsal, independent signed approvals, real multi-instance rollback and final ADR-003 acceptance.**
