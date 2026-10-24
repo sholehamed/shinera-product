@@ -50,4 +50,8 @@ If any condition fails, **Startup throws before registering platform endpoints**
 - Legacy database without uniqueness index: denied despite acknowledgement.
 - Existing real OpenIddict HTTP endpoint authorization and denial audit matrix must remain green.
 
+## Verified PR-head test evidence
+
+[Backend PR #31](https://github.com/sholehamed/Shinera-backend/pull/31), head `4a941c2f5b15feaa24e42d3c79eb2c3dcf1ebed8`, passed [Build/Unit CI 40086712581](https://github.com/sholehamed/Shinera-backend/actions/runs/40086712581) and [real SQL Server + signed HTTP CI 40086712579](https://github.com/sholehamed/Shinera-backend/actions/runs/40086712579): **36/36 real disposable SQL Server tests** (three new cutover gate cases), **89/89 signed OpenIddict HTTP assertions** and persisted denial audit checks. These are not a Production simulation or proof of signed deployment authorization. Both PRs remain Draft and unmerged.
+
 **No Production configuration was changed. Issue #11 stays OPEN until a supervised live change-control rehearsal, independent signed approvals, real multi-instance rollback and final ADR-003 acceptance.**
