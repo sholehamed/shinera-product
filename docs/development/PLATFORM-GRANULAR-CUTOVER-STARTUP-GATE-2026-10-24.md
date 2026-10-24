@@ -14,7 +14,7 @@ Before accepting an enabled flag, `PlatformGranularCutoverStartupGuard` requires
 1. Independent default-OFF deployment interlock `Identity:PlatformPermissions:AllowProductionGranularCutover=true`.
 2. `Identity:PlatformPermissions:ReviewedMasterTenantId` exactly equals the fixed compiled `DefaultSeedData.MasterTenant.Id`.
 3. `Identity:PlatformPermissions:ReviewedDatabaseName` equals the *actual* SQL Server connection database name.
-4. Earlier `20261024200000_permissioncodeuniqueness` migration already applied. Its old, independently reviewed Production opt-in / historical data cleanup is still required.
+4. Earlier `20261024200000_permissioncodeuniqueness` migration already applied **and the physical SQL Server protections still exist**: enabled, unfiltered, unique single-key `UX_Permissions_NormalizedCode` on the persisted computed `Permissions.NormalizedCode`, plus the enabled/trusted `CK_Permissions_Code_Length` constraint. The migration ledger alone is insufficient after schema drift. Its separately reviewed Production opt-in / historical data cleanup is still required.
 5. No blockers from **read-only** `PlatformProductionGrantInventory.ReadAsync`, including missing/inactive/duplicate catalog codes, missing Master SuperAdmin role grants, direct user denies, invalid cross-Tenant assignments and inactive platform storage.
 
 If any condition fails, **Startup throws before registering platform endpoints** rather than silently treating the two feature flags as a complete Production rollout authorization. This does not update flags, seed grants, touch `User.TenantId`, run a missing uniqueness migration, or modify existing authorization paths. Development/CI retains its opt-in test behavior.
@@ -47,7 +47,9 @@ If any condition fails, **Startup throws before registering platform endpoints**
 - Correct acknowledgement with incomplete grants: denied.
 - Correct acknowledgement, previously applied uniqueness migration, complete verified Master grants: preflight succeeds without writes.
 - Revoking one of the reviewed Master grants: next Production preflight fails; changing only both flags to OFF permits safe return to coarse enforcement without restoring the grant.
-- Legacy database without uniqueness index: denied despite acknowledgement.
+- Legacy database without uniqueness migration: denied despite acknowledgement.
+- Full migration history with a subsequently **dropped UNIQUE index**: denied even though the migration is recorded.
+- Physically **disabled/untrusted Permission.Code length constraint**: denied; both flags OFF still permit coarse-policy startup.
 - Existing real OpenIddict HTTP endpoint authorization and denial audit matrix must remain green.
 
 ## Verified PR-head test evidence
