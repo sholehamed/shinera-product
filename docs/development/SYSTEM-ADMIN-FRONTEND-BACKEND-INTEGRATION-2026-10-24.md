@@ -26,10 +26,12 @@ Deliver the first actually navigable, authenticated System Admin interface conne
 
 ## Backend contract corrections
 
-Only three narrowly scoped changes in Draft Backend PR #32:
+Initial narrowly scoped corrections in Draft Backend PR #32 (subsequently extended with global resource lists):
 1. `MenuCategoryUpdateCommandHandler` now loads `context.MenuCategories` rather than `context.Users`.
 2. `GroupMemberPagedListDto` explicitly exposes `UserId` (for audited `DELETE /system/Groups/{groupId}/members/{userId}`).
 3. `SuperDashboard` now computes `TotalUsers`.
+
+4. Adds SystemAdministrator-protected **global pagedList** endpoints for Permissions, ApiResources and UiResources, preserving all existing resource-scoped pagedList contracts.
 
 No new Production grants, signing configuration, tenant-scope bypass or migration flag change.
 
@@ -51,7 +53,7 @@ The Playwright tests cover actual System admin browser login, protected dashboar
 ## Remaining acceptance gates and recommended focus
 
 - Correct backend **System User Create/Update** contract: no fixed TenantId, proper System user type, no unintended password reset, server validation, audit/authorization and actual API+browser tests. Keep UI write paths OFF until fixed.
-- E2E the still-unverified CRUD screens (GroupMember read/mutation, Permission, Resources, modules, menu UI), and finalize startup/feature environmental configuration for eventual deployment.
+- Extend **positive form-submission browser** testing of the now API-tested Permission/API/UI Resource screens; test GroupMember mutations, menu editor UI and wider module/resource management; finalize deployment configuration.
 - Revalidate menus and correct server-side effective menu role scoping for non-SuperAdmin accounts before delegating platform administration.
 - No additional authentication/security infrastructure overhaul is needed for this first UI integration slice; keep Production granular enforcement OFF and P0 Issue #11 outstanding release gates separate.
 
@@ -68,3 +70,5 @@ The original `Permission`, `ApiResource`, `UiResource` and `Resource` pages are 
 - [Frontend implementation audit](https://github.com/sholehamed/Shinera-frontend/blob/fix/system-admin-real-api-e2e-20261024/docs/SYSTEM-ADMIN-PAGE-AUDIT-2026-10-24.md). Both engineering PRs and Product PR #28 remain Draft. No production grants or rollout.
 
 **Permission deletion order:** Real SQL Server E2E exposed intentional FK `409 Conflict` for a Permission still linked to ApiResource/UiResource. The valid cleanup workflow is audited Permission Update with `permissionResources: []` followed by Permission DELETE, then resource DELETE. Frontend reports blocked deletes instead of falsely showing success. The corrected unlink-first cleanup passed in [E2E 40096193047](https://github.com/sholehamed/Shinera-frontend/actions/runs/40096193047).
+
+**Final latest head evidence:** [Frontend CI #40096596395](https://github.com/sholehamed/Shinera-frontend/actions/runs/40096596395) **PASS 15/15 Vitest**, [real full-stack E2E #40096596387](https://github.com/sholehamed/Shinera-frontend/actions/runs/40096596387) **PASS 17/17 Playwright**, both on frontend head `a12487aa2adaa495477a9d09c73f0fd120e4fc0d`. [Backend CI #40094980702](https://github.com/sholehamed/Shinera-backend/actions/runs/40094980702) and [backend real SQL Server checks #40094980698](https://github.com/sholehamed/Shinera-backend/actions/runs/40094980698) both **PASS** on backend Draft #32 head `c4e2fba1ae9e694b706661eaaf2396f104eb3f94`. All three PRs remain Draft and unmerged; E2E is against paired backend feature branch, **not** deployed production or post-merge backend `main`.
