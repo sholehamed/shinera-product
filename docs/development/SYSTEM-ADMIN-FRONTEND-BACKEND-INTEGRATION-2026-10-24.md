@@ -33,7 +33,7 @@ Only three narrowly scoped changes in Draft Backend PR #32:
 
 No new Production grants, signing configuration, tenant-scope bypass or migration flag change.
 
-## Real full-stack validation — last tested commit before documentation-only updates
+## Real full-stack validation — verified executable branch and documentation-only follow-up
 
 | Gate | Evidence | Result |
 |---|---|---|
@@ -43,6 +43,8 @@ No new Production grants, signing configuration, tenant-scope bypass or migratio
 | Backend SQL Server security | [Backend SQL CI #40091066164](https://github.com/sholehamed/Shinera-backend/actions/runs/40091066164) on same backend head | **PASS** |
 
 The Playwright tests cover actual System admin browser login, protected dashboard and Tenant list, Role create/update/get/delete, and MenuCategory API create/update/get/delete. Tests are against disposable local E2E credentials/DB, **not mocked HTTP and not Production**. Legacy test coverage also includes unauthorized access/refresh-token behavior. Full coverage of System User write, GroupMember mutations and every legacy management page is not claimed.
+
+**Latest recheck on frontend head `d5f08390356493449dd7675663b1274533b7188d` after frontend audit/E2E-doc changes:** [Build/Unit #40093675395](https://github.com/sholehamed/Shinera-frontend/actions/runs/40093675395) **PASS 15/15** and [actual .NET+SQL Server Playwright #40093675380](https://github.com/sholehamed/Shinera-frontend/actions/runs/40093675380) **PASS 16/16**. Counts above for the earlier `aea2f27d` head remain historical evidence; both sets passed. This central documentation change does not alter application code.
 
 **Integration requirement before merge:** The full-stack workflow currently checks out the backend **Draft PR #32 branch** to exercise coordinated changes; after backend PR #32 merges, restore workflow checkout to `main`, run E2E again, and only then review/merge frontend PR #4. The latest CI verification predates documentation-only commits; these must not be represented as independently rerun test results without new CI.
 
